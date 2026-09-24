@@ -1,0 +1,58 @@
+<section class="la-section_hero01"><div class="la-section_padding-horizontal-hero"><div class="la-section_container-hero"><div class="la-brand-section_padding-vertical-hero"><div class="la-component_hero01"><div class="w-layout-grid la-brand-hero01-wrapper"><div class="la-hero01-content-wrapper"><div data-figma-id="2:1034" class="div-block-13"><p data-figma-id="2:1035" class="la-text-heading-h1-subheading text-color-white">قسّمها على 12</p><img src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/69aa769ee6bf5e1faf57a177_AR%20Wordmark%20Tamara%20Logo.svg" data-figma-image-id="67b30426da31744a0e11790f" width="64" height="21" alt="" data-figma-id="2:1036" data-figma-image-hash="bfe87933cf0e88339f0ecd6554215dfa" loading="lazy"/></div><div class="la-space-heading-description"></div><h1 data-figma-id="2:1033" class="la-text-heading-h1 text-color-white">ليغو (مك)</h1><div class="la-space-heading-subheading"></div><a id="hero-btn-shop" href="https://lego.saudiblocks.com" target="_blank" class="la-btn-primary color-white w-inline-block"><p data-figma-id="2:170">تسوّق من ليغو (مك)</p></a></div><div id="w-node-b118f4cc-43b1-e53e-ebfa-6fe7411438e9-fa0fb12f" class="la-brand-hero01-image-wrapper"><img src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/69d4d8eb4228b91745eebf1b_Lavender_Merchant%20Page-09.avif" loading="lazy" alt="" class="la-brand-hero01-image"/></div></div></div></div></div></div></section></div><div><div class="la-section_padding-horizontal"><div class="la-section_container"><div class="la-section_padding-vertical"><div><div><div class="la-wrapper-center-80--width"><h2 data-figma-id="2:1073" class="la-text-heading-h2">ادفع مع تمارا في ليغو (مك)</h2></div><div class="la-brand-space-title-content"></div><div class="div-block-213"><div class="la-brand-introduction-content"><div class="div-block-214"><p data-figma-id="2:1074" class="la-text-heading-h2-subheading">تسوّق من ليغو (مك) مع تمارا وقسّم فاتورتك! استكشف مجموعات الليغو للأطفال والكبار وهواة التجميع لعوالم متنوعة ومجسمات إبداعية. بدون رسوم تأخير وتجربة دفع سلسة.</p><p data-figma-id="2:1079" class="la-text-heading-h2-subheading">ليغو (مك) تقدم عالماً متكاملاً من الإبداع مع مكعبات مميزة ومجموعات متنوعة تناسب جميع الأعمار والاهتمامات، من اللعب اليومي إلى المجسمات الاحترافية. استمتع بتجربة تسوّق مميزة وقسّم فاتورتك مع تمارا.</p></div></div><div class="la-brand-space-title-content"></div><div id="la-category-chips" data-figma-id="2:1082" class="la-category-chips wait-load"><div id="la-category-source" class="la-category-source">ألعاب, هدايا, أطفال, مجسمات, تعليم</div><div class="code---tamara-brand-categories w-embed w-script"></div><div class="la-chip is-hidden">Dermatology</div></div></div></div></div></div></div></div></div><div class="div-block-215"><div class="la-section_padding-horizontal"><div class="la-section_container"><div class="la-section_padding-vertical"><div><div class="la-wrapper-center-80--width"><div class="la-text-heading-h2-small">متاجر مختارة</div></div><div class="la-space-heading-content"></div><div><div class="w-embed w-script"><!-- ===== FEATURED STORES ONLY (embed block) ===== -->
+<div id="ts-featured-root" data-per="4">
+  <section id="ts-featured-section" class="ts-section" style="display:none">
+    <div id="ts-featured-grid" class="ts-grid"></div>
+    <div class="ts-actions">
+      <button id="ts-featured-more" class="la-btn-primary color-transparent" style="margin-bottom:30px;display:none">
+        See more
+      </button>
+    </div>
+  </section>
+</div>
+
+<style>
+  .ts-section { margin: 28px 0; }
+  .ts-sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+  .ts-title { font-size: 24px; font-weight: 700; margin: 0; }
+  .ts-grid { display: grid; gap: 24px; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 991px) { .ts-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .ts-grid { grid-template-columns: repeat(2, 1fr); } }
+  .ts-card {
+    display: flex; flex-direction: column; height: 100%;
+    border: 2px solid #EBEEF4; border-radius: 24px; overflow: hidden;
+    background: #fff; text-decoration: none; color: inherit; position: relative;
+  }
+  .ts-card__media { position: relative; aspect-ratio: 16/10; background: white; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+  .ts-card__media img { width: 50%; display: block; transition: transform .45s ease; }
+  .ts-card__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.10); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+  .ts-card__action {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 36px; height: 36px; border-radius: 999px; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    opacity: 0; transform: translateY(6px);
+    transition: opacity .22s ease, transform .22s ease;
+  }
+  @media (max-width: 768px) { .ts-card__action { display: none; } }
+  .ts-card:hover .ts-card__media img { transform: scale(1.06); }
+  .ts-card:hover .ts-card__overlay { opacity: 1; }
+  .ts-card:hover .ts-card__action { opacity: 1; transform: none; }
+  .ts-card__body { display: flex; align-items: center; gap: 10px; padding: 10px 12px; display: none; }
+  .ts-card__logo { width: 28px; height: 28px; border-radius: 50%; background: #f6f7f8; object-fit: cover; }
+  .ts-card__name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ts-actions { display: flex; justify-content: center; margin-top: 40px; }
+  .skel {
+    border-radius: 12px;
+    background: linear-gradient(90deg, #f2f3f6, #e8ebf1, #f2f3f6);
+    background-size: 200% 100%;
+    animation: sh 1.1s ease-in-out infinite;
+  }
+  @keyframes sh { 0% { background-position: 0 0; } 100% { background-position: 200% 0; } }
+  .ts-card.is-loading .ts-card__media .skel { width: 100%; height: 100%; display: block; }
+  .ts-card.is-loading .ts-card__body .skel.logo { width: 28px; height: 28px; border-radius: 50%; }
+  .ts-card.is-loading .ts-card__body .skel.text { width: 60%; height: 12px; border-radius: 6px; }
+</style>
+
+</div></div></div></div></div></div></div><div class="la-section_brand-cta"><div class="la-section_padding-horizontal"><div class="la-section_container"><div class="la-section_padding-vertical"><div class="la-brand-cta-component"><div class="la-brand-cta-content"><img width="764" height="Auto" alt="" src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/68ab86eaecd1967e248dec08_tamara-business-logo.avif" loading="lazy" class="la-business-logo-with-border"/><h2 class="la-text-heading-h2-small">ودك تعزز من نمو متجرك وتحسن من نتائج إعلاناتك؟</h2><div class="la-space-heading-subheading"></div><p class="la-text-cta-description">استفيد من الفرص وانضم إلى تمارا</p><div class="la-space-subheading-btn"></div><a data-figma-id="2:169" href="https://business.tamara.co/?locale=ar_SA&amp;utm_source=Website_Brand&amp;utm_medium=Website_Brand_AR&amp;utm_campaign=Website_Brand_AR_Footer" target="_blank" class="la-btn-primary-with-icon w-inline-block"><p data-figma-id="2:170">ابدأ الحين</p><div class="chevron-icon">chevron_left</div></a></div><div class="la-brand-cta-image-wrapper"><img src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/69a16b03a7332b7852c49ba1_Lavender_Merchant%20Page-05.webp" loading="lazy" width="1960.5" alt="" class="la-brand-cta-image"/></div><div class="div-block-211"><img src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/69a16b04f13014e8edf2c691_Lavender_Merchant%20Page-02.webp" loading="lazy" alt=""/></div></div></div></div></div></div>

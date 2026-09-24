@@ -1,0 +1,9 @@
+import TamaraPage from '@/components/TamaraPage';
+import header from '@/components/exact/en-sa-stores-riobelo-header.html';
+import body from '@/components/exact/en-sa-stores-riobelo-body.html';
+import footer from '@/components/exact/en-sa-stores-riobelo-footer.html';
+import inline from '@/components/exact/en-sa-stores-riobelo.inline.txt';
+
+export default function Page() {
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+}

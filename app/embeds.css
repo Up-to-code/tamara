@@ -1,0 +1,50 @@
+/* Click-to-load facade for YouTube/Embedly embeds. The original hydrates
+   these via Webflow after load; when the embed endpoint is blocked the page
+   would show a dead frame — the facade shows a thumbnail + play button and
+   only creates the iframe on click. */
+.tl-yt {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  background: #000;
+  min-height: 200px;
+}
+.tl-yt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.tl-yt .tl-yt-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 68px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 0, 0, 0.9);
+  border: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.tl-yt .tl-yt-play::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-left: 20px solid #fff;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  transform: translateX(2px);
+}
+.tl-yt iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

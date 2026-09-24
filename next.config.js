@@ -1,0 +1,20 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    unoptimized: true,
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.html$/,
+      use: 'raw-loader',
+    });
+    config.module.rules.push({
+      test: /\.inline\.txt$/,
+      use: 'raw-loader',
+    });
+    return config;
+  },
+};
+
+module.exports = nextConfig;

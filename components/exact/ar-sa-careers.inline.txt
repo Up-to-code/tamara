@@ -1,0 +1,1303 @@
+function __tlReady(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn);}else{fn();}}
+WebFont.load({  google: {    families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Material Symbols Outlined:300,400,500,600,700"]  }});
+;
+!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
+;
+const path = window.location.pathname.toLowerCase();
+  if (window.location.pathname !== path) {
+    window.location.replace(path);
+  }
+;
+window.pageSupportedLanguages = ['en']; //['en', 'ar'];
+  window.pageSupportedCountries = ['sa', 'ae', 'kw', 'bh']; //['sa', 'ae', 'kw', 'bh'];
+;
+(function () {
+  document.addEventListener('click', function (e) {
+    const menuBtn = e.target.closest('.w-nav-button');
+    if (!menuBtn) return;
+
+    const nav = menuBtn.closest('.w-nav');
+    setTimeout(() => {
+      const personalTab = nav ? nav.querySelector('.is-default-open') : document.querySelector('.is-default-open');
+      if (personalTab) personalTab.click();
+    }, 50);
+  }, true);
+})();
+;
+(() => {
+    'use strict';
+
+    const CONFIG = {
+      boardToken: 'tamara',
+      websiteMappingField: 'Website Mapping',
+      fallbackFamily: 'Others',
+      detailPageSlug: 'job-detail',
+      previewLimit: 5,
+      labels: {
+        familyDefault: 'Job family',
+        officeDefault: 'All offices',
+        allFamiliesOption: 'All Job Families',
+        allOfficesOption: 'All Offices',
+      },
+    };
+
+    /*
+     * These paths are initial fallbacks. The separate approved-icons
+     * embed can replace them after each group is rendered.
+     */
+    const icon = (background, foreground, content) => `
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 53.65 53.65"
+            role="presentation"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect
+              x="0"
+              y="0"
+              width="53.65"
+              height="53.65"
+              rx="11.3"
+              fill="${background}"
+            />
+            <g fill="${foreground}">
+              ${content}
+            </g>
+          </svg>
+        `;
+    
+    const ICONS = {
+          "Care": icon(
+            "#ffe6f6",
+            "#c905a3",
+            `<path d="m25.99 37c-.28-.1-.53-.25-.75-.47l-2.02-1.84c-2.07-1.89-3.93-3.77-5.6-5.63-1.67-1.86-2.5-3.91-2.5-6.15 0-1.83.61-3.36 1.84-4.59s2.76-1.84 4.59-1.84c1.03 0 2.01.22 2.92.66s1.7 1.04 2.34 1.8c.64-.76 1.42-1.36 2.34-1.8s1.89-.66 2.92-.66c1.83 0 3.36.61 4.59 1.84s1.84 2.76 1.84 4.59c0 2.24-.83 4.3-2.48 6.17s-3.54 3.75-5.64 5.64l-1.99 1.81c-.21.21-.46.37-.75.47-.28.1-.56.15-.83.15s-.55-.05-.83-.15Zm-.28-15.73c-.57-.8-1.17-1.41-1.81-1.83s-1.42-.63-2.34-.63c-1.17 0-2.14.39-2.92 1.17s-1.17 1.75-1.17 2.92c0 1.01.36 2.09 1.08 3.23s1.58 2.25 2.59 3.32c1 1.07 2.04 2.08 3.1 3.01s1.92 1.71 2.59 2.31c.66-.6 1.53-1.37 2.59-2.31s2.1-1.94 3.1-3.01 1.87-2.18 2.59-3.32c.72-1.14 1.08-2.22 1.08-3.23 0-1.17-.39-2.14-1.17-2.92-.78-.78-1.75-1.17-2.92-1.17-.92 0-1.7.21-2.34.63s-1.25 1.03-1.81 1.83c-.14.19-.3.34-.5.44s-.4.15-.61.15-.42-.05-.61-.15-.36-.24-.5-.44Z"/>`
+          ),
+    
+          "Credit": icon(
+            "#d8f6db",
+            "#164922",
+            `<path d="m16.88 20.86h19.88v-2.48H16.88v2.48Zm-2.48-2.48c0-.68.24-1.27.73-1.75s1.07-.73 1.75-.73h19.88c.68 0 1.27.24 1.75.73s.73 1.07.73 1.75v6.21c0 .35-.12.65-.36.89s-.53.36-.89.36H16.88v7.45h3.85c.35 0 .65.12.89.36s.36.53.36.89-.12.65-.36.89-.53.36-.89.36h-3.85c-.68 0-1.27-.24-1.75-.73s-.73-1.07-.73-1.75V18.38Zm16.08 19.38c-.17 0-.32-.03-.47-.09s-.28-.16-.4-.28l-3.54-3.54c-.23-.23-.35-.51-.36-.85s.11-.64.36-.89c.23-.23.51-.34.85-.34s.64.11.89.34l2.67 2.61 6.12-6.12c.25-.25.54-.37.89-.36s.64.14.89.39c.23.25.35.54.36.87s-.11.62-.36.87l-7.02 7.02c-.12.12-.26.22-.4.28s-.3.09-.47.09Z"/>`
+          ),
+    
+          "Data": icon(
+            "#fff7d7",
+            "#965628",
+            `<path d="M15.31 38.33c-.36 0-.67-.12-.91-.37-.25-.25-.37-.55-.37-.91s.12-.67.37-.91.55-.37.91-.37h23.02c.36 0 .67.12.91.37s.37.55.37.91-.12.67-.37.91c-.25.25-.55.37-.91.37H15.31Zm.56-4.4c-.37-.37-.56-.83-.56-1.36v-5.12c0-.53.19-.99.56-1.36.37-.37.83-.56 1.36-.56s.99.19 1.36.56c.37.37.56.83.56 1.36v5.12c0 .53-.19.99-.56 1.36-.37.37-.83.56-1.36.56s-.99-.19-1.36-.56Zm6.4 0c-.37-.37-.56-.83-.56-1.36V21.06c0-.53.19-.99.56-1.36s.83-.56 1.36-.56.99.19 1.36.56.56.83.56 1.36v11.51c0 .53-.19.99-.56 1.36-.37.37-.83.56-1.36.56s-.99-.19-1.36-.56Zm6.4 0c-.37-.37-.56-.83-.56-1.36V24.9c0-.53.19-.99.56-1.36s.83-.56 1.36-.56.99.19 1.36.56.56.83.56 1.36v7.67c0 .53-.19.99-.56 1.36-.37.37-.83.56-1.36.56s-.99-.19-1.36-.56Zm6.4 0c-.37-.37-.56-.83-.56-1.36V17.22c0-.53.19-.99.56-1.36s.83-.56 1.36-.56.99.19 1.36.56.56.83.56 1.36v15.35c0 .53-.19.99-.56 1.36-.37.37-.83.56-1.36.56s-.99-.19-1.36-.56Z"/>`
+          ),
+    
+          "Engineering": icon(
+            "#dae2ff",
+            "#5b22ff",
+            `<path d="m15.06 26.82 4.14 4.14c.26.29.4.63.41 1.02s-.13.74-.41 1.02-.62.43-1.01.43-.72-.14-1.01-.43L12 27.83c-.29-.29-.43-.62-.43-1.01s.14-.72.43-1.01l5.18-5.18c.29-.29.62-.43 1.01-.43s.72.14 1.01.43.43.63.43 1.02-.14.74-.43 1.02l-4.14 4.14Zm7.32 10.81c-.18-.35-.21-.71-.09-1.1l6.33-20.28c.12-.38.35-.67.7-.85s.71-.21 1.1-.09.67.35.85.7.21.71.09 1.1l-6.33 20.28c-.12.38-.35.67-.7.85s-.71.21-1.1.09-.67-.35-.85-.7Zm16.2-10.81-4.14-4.14c-.29-.29-.43-.63-.43-1.02s.14-.74.43-1.02.62-.43 1.01-.43.72.14 1.01.43l5.18 5.18c.29.29.43.62.43 1.01s-.14.72-.43 1.01l-5.18 5.18c-.29.29-.62.43-1.01.43s-.72-.14-1.01-.43-.43-.63-.43-1.02.14-.74.43-1.02l4.14-4.14Z"/>`
+          ),
+    
+          "Finance": icon(
+            "#d8f6db",
+            "#164922",
+            `<path d="M29.24 28.01c-.99 0-1.83-.35-2.53-1.04s-1.04-1.54-1.04-2.53.35-1.83 1.04-2.53 1.54-1.04 2.53-1.04 1.83.35 2.53 1.04 1.04 1.54 1.04 2.53-.35 1.83-1.04 2.53-1.54 1.04-2.53 1.04Zm-8.32 3.57c-.65 0-1.21-.23-1.68-.7s-.7-1.03-.7-1.68v-9.51c0-.65.23-1.21.7-1.68s1.03-.7 1.68-.7h16.65c.65 0 1.21.23 1.68.7s.7 1.03.7 1.68v9.51c0 .65-.23 1.21-.7 1.68s-1.03.7-1.68.7H20.92Zm2.38-2.38h11.89c0-.65.23-1.21.7-1.68.47-.47 1.03-.7 1.68-.7v-4.76c-.65 0-1.21-.23-1.68-.7s-.7-1.03-.7-1.68H23.3c0 .65-.23 1.21-.7 1.68s-1.03.7-1.68.7v4.76c.65 0 1.21.23 1.68.7.47.47.7 1.03.7 1.68Zm11.89 7.13H16.17c-.65 0-1.21-.23-1.68-.7-.47-.47-.7-1.03-.7-1.68V21.76c0-.34.11-.62.34-.85s.51-.34.85-.34.62.11.85.34.34.51.34.85v11.89h19.02c.34 0 .62.11.85.34s.34.51.34.85-.11.62-.34.85-.51.34-.85.34Z"/>`
+          ),
+    
+          "Legal": icon(
+            "#fff7d7",
+            "#965628",
+            `<path d="M16.28 37.95c-.33 0-.61-.11-.83-.34-.22-.22-.34-.5-.34-.83s.11-.61.34-.83.5-.34.83-.34h9.37V22.52c-.51-.18-.95-.45-1.32-.82s-.64-.81-.82-1.32h-3.72l3.22 7.56c.1.21.16.43.18.66s0 .45-.03.69c-.18.9-.66 1.59-1.45 2.08s-1.63.73-2.5.73-1.71-.24-2.5-.73-1.27-1.18-1.45-2.08c-.04-.23-.05-.46-.03-.69s.08-.44.18-.66l3.22-7.56h-1.17c-.33 0-.61-.11-.83-.34-.22-.22-.34-.5-.34-.83s.11-.61.34-.83c.22-.22.5-.34.83-.34h6.06c.23-.68.65-1.24 1.26-1.68s1.29-.66 2.05-.66 1.44.22 2.05.66 1.03 1 1.26 1.68h6.06c.33 0 .61.11.83.34s.34.5.34.83-.11.61-.34.83-.5.34-.83.34h-1.17l3.22 7.56c.1.21.16.43.18.66s0 .45-.03.69c-.18.9-.66 1.59-1.45 2.08s-1.63.73-2.5.73-1.71-.24-2.5-.73-1.27-1.18-1.45-2.08c-.04-.23-.05-.46-.03-.69s.08-.44.18-.66l3.22-7.56h-3.72c-.18.51-.45.95-.82 1.32s-.81.64-1.32.82v13.09h9.37c.33 0 .61.11.83.34s.34.5.34.83-.11.61-.34.83c-.22.22-.5.34-.83.34H16.28Zm15.96-9.37h4.39l-2.2-5.1-2.2 5.1Zm-15.23 0h4.39l-2.2-5.1-2.2 5.1Zm9.81-8.2c.33 0 .61-.11.83-.34.22-.22.34-.5.34-.83s-.11-.61-.34-.83c-.22-.22-.5-.34-.83-.34s-.61.11-.83.34-.34.5-.34.83.11.61.34.83.5.34.83.34Z"/>`
+          ),
+    
+          "Marketing & Comms": icon(
+            "#efe5ff",
+            "#5300b8",
+            `<path d="M36.82 37.15c-.15 0-.29-.03-.42-.08s-.25-.14-.36-.25l-2.55-2.55H22.38c-.61 0-1.13-.22-1.57-.65-.43-.43-.65-.96-.65-1.57v-1.11h12.22c.61 0 1.13-.22 1.57-.65s.65-.96.65-1.57v-7.77h1.11c.61 0 1.13.22 1.57.65s.65.96.65 1.57v12.86c0 .33-.11.61-.33.82s-.48.32-.78.32Zm-18.88-9.36 1.3-1.3h10.91v-7.77H17.93v9.08Zm-1.11 3.8c-.3 0-.56-.11-.78-.32s-.33-.49-.33-.82V18.71c0-.61.22-1.13.65-1.57s.96-.65 1.57-.65h12.22c.61 0 1.13.22 1.57.65s.65.96.65 1.57v7.77c0 .61-.22 1.13-.65 1.57s-.96.65-1.57.65h-10l-2.55 2.55c-.11.11-.23.19-.36.25s-.27.08-.42.08Z"/>`
+          ),
+    
+          "Operations": icon(
+            "#dae2ff",
+            "#5b22ff",
+            `<path d="M23.63 29.97c-1.98 0-3.67-.69-5.06-2.08s-2.08-3.07-2.08-5.06c0-.4.03-.79.09-1.19s.17-.77.33-1.13c.1-.2.22-.35.37-.45s.31-.17.49-.21.36-.03.55.01.36.15.52.31l3.12 3.12 2.14-2.14-3.12-3.12c-.16-.16-.26-.33-.31-.52s-.05-.37-.01-.55.11-.34.21-.49.25-.27.45-.37c.36-.16.73-.27 1.13-.33s.79-.09 1.19-.09c1.98 0 3.67.69 5.06 2.08 1.39 1.39 2.08 3.07 2.08 5.06 0 .46-.04.89-.12 1.29s-.2.81-.36 1.2l6.01 5.95c.58.58.86 1.28.86 2.11s-.29 1.54-.86 2.11-1.28.86-2.11.86-1.54-.3-2.11-.89l-5.95-5.98c-.4.16-.8.28-1.2.36s-.84.12-1.29.12Zm0-2.38c.52 0 1.03-.08 1.55-.24s.98-.41 1.4-.74l7.23 7.23c.1.1.23.14.4.13s.3-.06.4-.16.15-.23.15-.4-.05-.3-.15-.4l-7.23-7.2c.36-.4.61-.86.77-1.38.16-.53.24-1.06.24-1.59 0-1.19-.38-2.23-1.15-3.11s-1.71-1.41-2.84-1.59l2.2 2.2c.24.24.36.52.36.83s-.12.6-.36.83l-3.81 3.81c-.24.24-.52.36-.83.36s-.6-.12-.83-.36l-2.2-2.2c.18 1.13.71 2.08 1.59 2.84.88.76 1.92 1.15 3.11 1.15Z"/>`
+          ),
+    
+          "Others": icon(
+            "#f0f0ff",
+            "#444c6d",
+            `<path d="M26.82 39.65c-7.07 0-12.83-5.75-12.83-12.83s5.75-12.83 12.83-12.83 12.83 5.75 12.83 12.83-5.75 12.83-12.83 12.83Zm0-23.16c-5.7 0-10.33 4.63-10.33 10.33s4.63 10.33 10.33 10.33 10.33-4.63 10.33-10.33-4.63-10.33-10.33-10.33Z"/><circle cx="22.21" cy="26.82" r="1.74"/><circle cx="26.82" cy="26.82" r="1.74"/><circle cx="31.44" cy="26.82" r="1.74"/>`
+          ),
+    
+          "People": icon(
+            "#ffe6f6",
+            "#c905a3",
+            `<path d="M31.05 29.8c-.63-.63-.95-1.41-.95-2.33s.32-1.69.95-2.33c.63-.63 1.41-.95 2.33-.95s1.69.32 2.33.95c.63.63.95 1.41.95 2.33s-.32 1.69-.95 2.33-1.41.95-2.33.95-1.69-.32-2.33-.95Zm-4.23 6.19v-.52c0-.52.14-1.01.41-1.46.27-.45.66-.77 1.16-.97.79-.33 1.6-.57 2.44-.74s1.69-.25 2.54-.25 1.7.08 2.54.25 1.65.41 2.44.74c.5.2.89.52 1.16.97.27.45.41.93.41 1.46v.52c0 .37-.13.68-.38.93s-.56.38-.93.38H28.13c-.37 0-.68-.13-.93-.38s-.38-.56-.38-.93ZM20.5 25.28c-1.03-1.03-1.54-2.26-1.54-3.7s.51-2.68 1.54-3.7c1.03-1.03 2.26-1.54 3.7-1.54s2.68.51 3.7 1.54c1.03 1.03 1.54 2.26 1.54 3.7s-.51 2.68-1.54 3.7-2.26 1.54-3.7 1.54-2.68-.51-3.7-1.54Zm-6.78 8.35c0-.74.19-1.43.56-2.05s.88-1.1 1.54-1.43c1.31-.66 2.67-1.16 4.08-1.51s2.84-.52 4.31-.52c.76 0 1.53.07 2.29.2s1.53.28 2.29.46L26.57 31c-.39-.11-.79-.18-1.18-.21s-.79-.05-1.18-.05c-1.27 0-2.51.15-3.72.46s-2.38.74-3.49 1.31c-.22.11-.38.26-.49.46s-.16.42-.16.66v1.05h7.86v1.28c0 .28.05.54.16.77s.26.42.46.57h-8.49c-.72 0-1.34-.26-1.85-.77s-.77-1.13-.77-1.85v-1.05Zm12.34-10.21c.51-.51.77-1.13.77-1.85s-.26-1.34-.77-1.85-1.13-.77-1.85-.77-1.34.26-1.85.77-.77 1.13-.77 1.85.26 1.34.77 1.85 1.13.77 1.85.77 1.34-.26 1.85-.77Z"/>`
+          ),
+    
+          "Product & Design": icon(
+            "#efe5ff",
+            "#5300b8",
+            `<path d="M20.98 39.76c-.65 0-1.2-.23-1.66-.69-.46-.46-.69-1.01-.69-1.66V16.24c0-.65.23-1.2.69-1.66s1.01-.69 1.66-.69h11.76c.65 0 1.2.23 1.66.69s.69 1.01.69 1.66v3.65c.35.14.64.35.85.65s.32.63.32 1v2.35c0 .37-.11.71-.32 1s-.5.51-.85.65v11.88c0 .65-.23 1.2-.69 1.66-.46.46-1.01.69-1.66.69H20.98Zm0-2.35h11.76V16.24H20.98v21.17Zm6.72-1.51c.23-.23.34-.5.34-.84s-.11-.61-.34-.84c-.23-.23-.5-.34-.84-.34s-.61.11-.84.34-.34.5-.34.84.11.61.34.84.5.34.84.34.61-.11.84-.34Z"/>`
+          ),
+    
+          "Risk, Compliance & Audit": icon(
+            "#d0fafa",
+            "#008787",
+            `<path d="M27.73 31.5c.24-.24.36-.54.36-.9s-.12-.66-.36-.9c-.24-.24-.54-.36-.9-.36s-.66.12-.9.36-.36.54-.36.9.12.66.36.9.54.36.9.36.66-.12.9-.36Zm0-5.07c.24-.24.36-.54.36-.9v-3.81c0-.36-.12-.66-.36-.9-.24-.24-.54-.36-.9-.36s-.66.12-.9.36-.36.54-.36.9v3.81c0 .36.12.66.36.9s.54.36.9.36.66-.12.9-.36Zm-1.32 12.89c-.13-.02-.25-.05-.38-.1-2.85-.95-5.13-2.71-6.82-5.28-1.69-2.57-2.54-5.33-2.54-8.29v-5.99c0-.53.15-1 .46-1.43s.7-.73 1.19-.92l7.61-2.85c.3-.11.59-.16.89-.16s.59.05.89.16l7.61 2.85c.49.19.88.5 1.19.92s.46.9.46 1.43v5.99c0 2.96-.85 5.72-2.54 8.29-1.69 2.57-3.96 4.33-6.82 5.28-.13.04-.25.07-.38.1s-.26.03-.41.03-.29-.01-.41-.03Zm.41-2.51c2.2-.7 4.02-2.09 5.45-4.19 1.44-2.09 2.16-4.42 2.16-6.98v-5.99l-7.61-2.85-7.61 2.85v5.99c0 2.56.72 4.88 2.16 6.98s3.26 3.49 5.45 4.19Z"/>`
+          ),
+    
+          "Sales & Commercial": icon(
+            "#ffefd8",
+            "#bf0000",
+            `<path d="M18.1 38.04c-.69 0-1.27-.24-1.76-.73-.49-.49-.73-1.07-.73-1.76v-9.91c-.48-.44-.85-1-1.11-1.68s-.26-1.43-.02-2.24l1.31-4.24c.17-.54.46-.99.89-1.34s.92-.53 1.48-.53h17.32c.56 0 1.05.17 1.46.51s.72.79.9 1.36l1.31 4.24c.25.81.24 1.55-.02 2.21s-.63 1.24-1.11 1.71v9.91c0 .69-.24 1.27-.73 1.76-.49.49-1.07.73-1.76.73H18.1Zm11.46-13.71c.56 0 .99-.19 1.28-.58s.4-.82.34-1.29l-.69-4.36h-2.43v4.61c0 .44.15.82.44 1.14s.64.48 1.06.48Zm-5.61 0c.48 0 .87-.16 1.17-.48s.45-.7.45-1.14V18.1h-2.43l-.69 4.36c-.08.5.03.93.33 1.31s.69.56 1.17.56Zm-5.55 0c.37 0 .7-.13.98-.4s.45-.61.51-1.03l.69-4.8h-2.43l-1.25 4.17c-.12.42-.06.86.2 1.34s.69.72 1.29.72Zm16.82 0c.6 0 1.04-.24 1.31-.72s.33-.92.19-1.34l-1.31-4.17h-2.37l.69 4.8c.06.42.23.76.51 1.03s.61.4.98.4ZM18.09 35.55h17.45v-8.79c-.1.04-.17.06-.2.06h-.11c-.56 0-1.05-.09-1.48-.28s-.85-.49-1.26-.9c-.37.37-.8.66-1.28.87s-.99.31-1.53.31-1.09-.1-1.57-.31c-.49-.21-.92-.5-1.29-.87-.35.37-.76.66-1.23.87s-.97.31-1.51.31c-.6 0-1.15-.1-1.64-.31s-.92-.5-1.29-.87c-.44.44-.87.74-1.29.92-.43.18-.91.26-1.45.26h-.14c-.05 0-.11-.02-.17-.06v8.79Z"/>`
+          ),
+    
+          "Strategy & Executive": icon(
+            "#ffefd8",
+            "#bf0000",
+            `<path d="M18.68 38.78c-.57 0-1.07-.17-1.51-.52s-.74-.79-.91-1.34l-3.21-11.64c-.1-.4-.04-.77.2-1.1s.57-.5.99-.5h5.98l5.54-8.24c.1-.17.25-.3.44-.41s.39-.16.6-.16.41.05.6.16.34.24.44.41l5.54 8.24h6.04c.42 0 .75.17.99.5s.31.7.2 1.1l-3.21 11.64c-.17.55-.47.99-.91 1.34s-.94.52-1.51.52h-16.3Zm-.03-2.52h16.36l2.77-10.07h-21.9l2.77 10.07Zm9.96-3.26c.49-.49.74-1.09.74-1.78s-.25-1.28-.74-1.78-1.09-.74-1.78-.74-1.28.25-1.78.74-.74 1.09-.74 1.78.25 1.28.74 1.78 1.09.74 1.78.74 1.28-.25 1.78-.74Zm-5.33-9.33h7.08l-3.55-5.29-3.52 5.29Z"/>`
+          )
+        };
+
+    const API_BASE = `https://boards-api.greenhouse.io/v1/boards/${CONFIG.boardToken}`;
+
+    const locale =
+      location.pathname
+        .split('/')
+        .filter(Boolean)
+        .find((part) => /^[a-z]{2}-[a-z]{2}$/i.test(part)) || 'en-sa';
+
+    const detailPath = `/${locale}/${CONFIG.detailPageSlug}`;
+    const $ = (id) => document.getElementById(id);
+
+    const elements = {
+      groups: $('jobs-groups'),
+      loader: $('jobs-loader'),
+      search: $('jobs-search-input'),
+      reset: $('jobs-reset'),
+      familyButton: $('family-toggle'),
+      familyLabel: $('family-label'),
+      familyMenu: $('family-menu'),
+      officeButton: $('office-toggle'),
+      officeLabel: $('office-label'),
+      officeMenu: $('office-menu'),
+      empty: null,
+    };
+
+    const state = {
+      jobs: [],
+      families: [],
+      offices: [],
+      query: '',
+      family: '',
+      office: '',
+      expandedFamilies: new Set(),
+      openDropdown: null,
+    };
+
+    function resolveEmpty() {
+      if (!elements.empty) {
+        elements.empty = document.querySelector('.jobs-body > #jobs-empty, .la-job-list > #jobs-empty');
+      }
+
+      return elements.empty;
+    }
+
+    function showEmpty(show) {
+      const empty = resolveEmpty();
+
+      if (!empty) return;
+
+      empty.hidden = !show;
+      empty.setAttribute('aria-hidden', String(!show));
+    }
+
+    function esc(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function json(response) {
+      if (!response.ok) {
+        throw new Error(`Greenhouse request failed: ${response.status}`);
+      }
+
+      return response.json();
+    }
+
+    function debounce(callback, delay = 180) {
+      let timeout;
+
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback(...args), delay);
+      };
+    }
+
+    function metadata(job, name) {
+      const field = (Array.isArray(job.metadata) ? job.metadata : []).find(
+        (item) =>
+          String((item && item.name) || '')
+            .trim()
+            .toLowerCase() === name.toLowerCase(),
+      );
+
+      let value = field ? field.value : '';
+
+      if (Array.isArray(value)) {
+        value = value[0];
+      }
+
+      if (value && typeof value === 'object') {
+        value = value.name || value.label || value.value || '';
+      }
+
+      return String(value || '').trim();
+    }
+
+    function department(job) {
+      const item = (job.departments || []).find((departmentItem) => departmentItem && departmentItem.name);
+
+      return item ? item.name : '—';
+    }
+
+    function jobLocation(job) {
+      return job.location && job.location.name ? job.location.name : '—';
+    }
+
+    function arrow() {
+      return `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m9 6 6 6-6 6"></path>
+        </svg>
+      `;
+    }
+
+    function locationIcon() {
+      return `
+        <svg
+          class="job-location__icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+          <circle cx="12" cy="10" r="2.5"></circle>
+        </svg>
+      `;
+    }
+
+    function normalize(rawJobs) {
+      const familyMap = new Map();
+      let hasOthers = false;
+
+      const jobs = rawJobs.map((job) => {
+        const rawFamily = metadata(job, CONFIG.websiteMappingField);
+
+        const familyKey = rawFamily.toLowerCase();
+        let family;
+
+        if (!rawFamily || familyKey === CONFIG.fallbackFamily.toLowerCase()) {
+          family = CONFIG.fallbackFamily;
+          hasOthers = true;
+        } else if (familyMap.has(familyKey)) {
+          family = familyMap.get(familyKey);
+        } else {
+          family = rawFamily;
+          familyMap.set(familyKey, family);
+        }
+
+        return {
+          id: job.id,
+          title: job.title || 'Untitled role',
+          location: job.location || null,
+          departments: Array.isArray(job.departments) ? job.departments : [],
+          offices: Array.isArray(job.offices) ? job.offices : [],
+          family,
+        };
+      });
+
+      const families = [...familyMap.values()].sort((a, b) =>
+        a.localeCompare(b, 'en', {
+          sensitivity: 'base',
+        }),
+      );
+
+      if (hasOthers) {
+        families.push(CONFIG.fallbackFamily);
+      }
+
+      return { jobs, families };
+    }
+
+    function closeDropdown({ focus = false } = {}) {
+      if (!state.openDropdown) return;
+
+      const { button, menu } = state.openDropdown;
+
+      button.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('is-open');
+      state.openDropdown = null;
+
+      if (focus) {
+        button.focus();
+      }
+    }
+
+    function toggleDropdown(button, menu) {
+      const isOpen = state.openDropdown && state.openDropdown.menu === menu;
+
+      closeDropdown();
+
+      if (!isOpen) {
+        button.setAttribute('aria-expanded', 'true');
+        menu.classList.add('is-open');
+        state.openDropdown = { button, menu };
+      }
+    }
+
+    function buildMenu({ node, values, all, selected, onSelect }) {
+      node.innerHTML = '';
+
+      const options = [['', all], ...values.map((value) => [value, value])];
+
+      options.forEach(([value, label]) => {
+        const option = document.createElement('div');
+
+        option.className = 'jobs-select__option';
+        option.setAttribute('role', 'option');
+        option.tabIndex = 0;
+        option.setAttribute('aria-selected', String(value === selected));
+        option.textContent = label;
+
+        const select = () => {
+          onSelect(value);
+          closeDropdown();
+        };
+
+        option.onclick = select;
+
+        option.onkeydown = (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            select();
+          }
+        };
+
+        node.appendChild(option);
+      });
+    }
+
+    function collapseGroups() {
+      state.expandedFamilies.clear();
+    }
+
+    function updateMenus() {
+      buildMenu({
+        node: elements.familyMenu,
+        values: state.families,
+        all: CONFIG.labels.allFamiliesOption,
+        selected: state.family,
+        onSelect: (value) => {
+          collapseGroups();
+          state.family = value;
+
+          elements.familyLabel.textContent = value || CONFIG.labels.familyDefault;
+
+          updateMenus();
+          render();
+        },
+      });
+
+      buildMenu({
+        node: elements.officeMenu,
+        values: state.offices,
+        all: CONFIG.labels.allOfficesOption,
+        selected: state.office,
+        onSelect: (value) => {
+          collapseGroups();
+          state.office = value;
+
+          elements.officeLabel.textContent = value || CONFIG.labels.officeDefault;
+
+          updateMenus();
+          render();
+        },
+      });
+    }
+
+    function row(job) {
+      const title = esc(job.title);
+      const departmentName = esc(department(job));
+      const locationName = esc(jobLocation(job));
+
+      return `
+        <a
+          class="job-row"
+          href="${detailPath}?gh_jid=${encodeURIComponent(job.id)}"
+        >
+          <span class="job-title">
+            ${title}
+          </span>
+
+          <span
+            class="job-department"
+            title="${departmentName}"
+          >
+            ${departmentName}
+          </span>
+
+          <span
+            class="job-location"
+            title="${locationName}"
+          >
+            ${locationIcon()}
+
+            <span class="job-location__text">
+              ${locationName}
+            </span>
+          </span>
+
+          <span class="job-arrow" aria-hidden="true">
+            ${arrow()}
+          </span>
+        </a>
+      `;
+    }
+
+    function group(family, jobs, overview) {
+      const familyIcon = ICONS[family] || ICONS.Others;
+
+      const expanded = state.expandedFamilies.has(family);
+
+      const visibleJobs = overview && !expanded ? jobs.slice(0, CONFIG.previewLimit) : jobs;
+
+      const showViewAll = overview && !expanded && jobs.length > CONFIG.previewLimit;
+
+      return `
+        <section class="jobs-group">
+          <h2 class="jobs-group__heading">
+            <span class="jobs-group__icon" aria-hidden="true">${familyIcon}</span>
+
+            <span class="la-text-heading-h3">
+              ${esc(family)}
+            </span>
+          </h2>
+
+          <div class="jobs-table">
+            <div
+              class="jobs-table__header"
+              aria-hidden="true"
+            >
+              <span>Job title</span>
+              <span>Department</span>
+              <span>Location</span>
+              <span></span>
+            </div>
+
+            ${visibleJobs.map(row).join('')}
+
+            ${
+              showViewAll
+                ? `
+                  <div class="jobs-group__footer">
+                    <button
+                      class="jobs-view-family"
+                      type="button"
+                      data-family="${esc(family)}"
+                    >
+                      <span>
+                        View all ${esc(family)} roles
+                      </span>
+                      ${arrow()}
+                    </button>
+
+                    <button
+                      class="jobs-view-family-mobile"
+                      type="button"
+                      data-family="${esc(family)}"
+                    >
+                      <span>View all ${jobs.length} roles</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m9 6 6 6-6 6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                `
+                : ''
+            }
+          </div>
+        </section>
+      `;
+    }
+
+    function filteredJobs() {
+      return state.jobs.filter((job) => {
+        const searchableText = [job.title, job.family, department(job), jobLocation(job)].join(' ').toLowerCase();
+
+        const officeMatches = !state.office || job.offices.some((office) => office && office.name === state.office);
+
+        return (!state.query || searchableText.includes(state.query)) && (!state.family || job.family === state.family) && officeMatches;
+      });
+    }
+
+    function render() {
+      const jobs = filteredJobs();
+
+      const overview = !state.query && !state.family && !state.office;
+
+      showEmpty(!jobs.length);
+
+      if (!jobs.length) {
+        elements.groups.innerHTML = '';
+        updateReset();
+        return;
+      }
+
+      const grouped = new Map(state.families.map((family) => [family, []]));
+
+      jobs.forEach((job) => {
+        const familyJobs = grouped.get(job.family);
+
+        if (familyJobs) {
+          familyJobs.push(job);
+        }
+      });
+
+      elements.groups.innerHTML = state.families
+        .filter((family) => grouped.get(family) && grouped.get(family).length)
+        .map((family) => group(family, grouped.get(family), overview))
+        .join('');
+
+      elements.groups.querySelectorAll('.jobs-group__footer button[data-family]').forEach((button) => {
+        button.onclick = () => {
+          state.expandedFamilies.add(button.dataset.family);
+
+          render();
+        };
+      });
+
+      updateReset();
+    }
+
+    function updateReset() {
+      elements.reset.disabled = !state.query && !state.family && !state.office;
+    }
+
+    function readURLParameters() {
+      const parameters = new URLSearchParams(location.search);
+
+      const query = (parameters.get('q') || '').trim();
+
+      const family = (parameters.get('family') || '').trim();
+
+      const office = (parameters.get('office') || '').trim();
+
+      state.query = query.toLowerCase();
+
+      state.family = state.families.find((value) => value.toLowerCase() === family.toLowerCase()) || '';
+
+      state.office = state.offices.find((value) => value.toLowerCase() === office.toLowerCase()) || '';
+
+      elements.search.value = query;
+
+      elements.familyLabel.textContent = state.family || CONFIG.labels.familyDefault;
+
+      elements.officeLabel.textContent = state.office || CONFIG.labels.officeDefault;
+    }
+
+    function reset() {
+      collapseGroups();
+
+      state.query = '';
+      state.family = '';
+      state.office = '';
+
+      elements.search.value = '';
+
+      elements.familyLabel.textContent = CONFIG.labels.familyDefault;
+
+      elements.officeLabel.textContent = CONFIG.labels.officeDefault;
+
+      updateMenus();
+      render();
+    }
+
+    let placementObserver;
+    let placementTimeout;
+
+    function moveEmptyState() {
+      const body = document.querySelector(".job-list-code .jobs-body");
+      const groups = body && body.querySelector("#jobs-groups");
+      const empty = document.querySelector(".la-job-list > #jobs-empty");
+      if (!body || !groups || !empty || !empty.hasAttribute("aria-hidden")) return false;
+      body.insertBefore(empty, groups);
+      elements.empty = empty;
+      return true;
+    }
+
+    function startPlacement() {
+      if (moveEmptyState()) return;
+      const root = document.querySelector(".la-job-list") || document.body;
+      placementObserver = new MutationObserver(() => {
+        if (moveEmptyState()) {
+          placementObserver.disconnect();
+          clearTimeout(placementTimeout);
+        }
+      });
+      placementObserver.observe(root, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["aria-hidden"]
+      });
+      placementTimeout = setTimeout(() => placementObserver.disconnect(), 10000);
+    }
+
+    async function initialize() {
+      startPlacement();
+
+      try {
+        resolveEmpty();
+        showEmpty(false);
+
+        elements.loader.style.display = 'flex';
+
+        const data = await fetch(`${API_BASE}/jobs?content=true`).then(json);
+
+        const normalized = normalize(Array.isArray(data.jobs) ? data.jobs : []);
+
+        state.jobs = normalized.jobs;
+        state.families = normalized.families;
+
+        const offices = new Set();
+
+        state.jobs.forEach((job) => {
+          job.offices.forEach((office) => {
+            if (office && office.name) {
+              offices.add(office.name);
+            }
+          });
+        });
+
+        state.offices = [...offices].sort((a, b) => a.localeCompare(b));
+
+        readURLParameters();
+        updateMenus();
+        render();
+      } catch (error) {
+        console.error('Unable to load Greenhouse jobs:', error);
+
+        elements.groups.innerHTML = '';
+        showEmpty(true);
+      } finally {
+        elements.loader.style.display = 'none';
+        elements.loader.setAttribute('aria-busy', 'false');
+      }
+    }
+
+    elements.familyButton.onclick = () => {
+      toggleDropdown(elements.familyButton, elements.familyMenu);
+    };
+
+    elements.officeButton.onclick = () => {
+      toggleDropdown(elements.officeButton, elements.officeMenu);
+    };
+
+    elements.search.addEventListener(
+      'input',
+      debounce(() => {
+        collapseGroups();
+
+        state.query = elements.search.value.trim().toLowerCase();
+
+        render();
+      }),
+    );
+
+    elements.reset.onclick = reset;
+
+    document.addEventListener(
+      'pointerdown',
+      (event) => {
+        if (state.openDropdown && !state.openDropdown.menu.contains(event.target) && !state.openDropdown.button.contains(event.target)) {
+          closeDropdown();
+        }
+      },
+      true,
+    );
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeDropdown({ focus: true });
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      __tlReady( initialize, { once: true });
+    } else {
+      initialize();
+    }
+  })();
+;
+__tlReady( function () {
+    // Parse current URL in format "/{lang}-{country}/..."
+    var currentPath = window.location.pathname;
+    var regex = /^\/([a-z]{2,3})-([a-z]{2,3})(\/.*)?$/;
+    var match = currentPath.match(regex);
+
+    if (match) {
+      var currentLang = match[1].toLowerCase(); // e.g. "en" or "ar"
+      var currentCountry = match[2].toLowerCase(); // e.g. "sa", "ae", "kw"
+      var restOfPath = match[3] || ''; // the rest of the path, e.g. "/stores/noon"
+
+      // Update the language switch link
+      var languageSwitchLinks = document.querySelectorAll('.switch-language');
+      if (languageSwitchLinks.length > 0) {
+        var newLang = currentLang === 'en' ? 'ar' : 'en';
+        languageSwitchLinks.forEach(function (link) {
+          link.href = '/' + newLang + '-' + currentCountry + restOfPath;
+        });
+      }
+
+      // Update the country dropdown links
+      var countries = ['sa', 'ae', 'kw', 'bh'];
+      countries.forEach(function (country) {
+        var selector = '.switch-country-' + country;
+        var countryLink = document.querySelector(selector);
+        if (countryLink) {
+          countryLink.href = '/' + currentLang + '-' + country + restOfPath;
+        }
+      });
+    }
+  });
+;
+function disableScroll() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = window.innerWidth - document.documentElement.clientWidth + 'px';
+  }
+  function enableScroll() {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }
+
+  __tlReady( function () {
+    var popups = document.querySelectorAll('[class^="ta-popup-modal"]');
+    if (!popups.length) return;
+
+    popups.forEach(function (modal) {
+      var observer = new MutationObserver(function () {
+        var isVisible = window.getComputedStyle(modal).display !== 'none';
+        if (isVisible) {
+          disableScroll();
+        } else {
+          var anyVisible = Array.from(popups).some(function (p) {
+            return window.getComputedStyle(p).display !== 'none';
+          });
+          if (!anyVisible) enableScroll();
+        }
+      });
+
+      observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
+    });
+  });
+
+  document.addEventListener('click', function (event) {
+    if (event.target.closest('.ta-popup-bg') || event.target.closest('.ta-popup-btn-close')) {
+      // find and hide all popup modals that have class start with 'ta-popup-modal'
+      var popups = document.querySelectorAll('[class^="ta-popup-modal"]');
+      popups.forEach(function (popup) {
+        popup.style.display = 'none';
+      });
+    }
+  });
+;
+__tlReady( function () {
+    if (!window.pageLocales) return;
+
+    // Hide language switches not supported
+    document.querySelectorAll('.switch_language [data-lang]').forEach((btn) => {
+      if (!window.pageLocales.languages.includes(btn.dataset.lang)) {
+        btn.style.display = 'none';
+      }
+    });
+
+    // Hide country switches not supported
+    document.querySelectorAll("[class^='switch-country-']").forEach((el) => {
+      const country = el.className.match(/switch-country-([a-z]+)/i)?.[1];
+      if (country && !window.pageLocales.countries.includes(country)) {
+        el.style.display = 'none';
+      }
+    });
+  });
+;
+document.body.classList.add('loading');
+  __tlReady( function () {
+    document.body.classList.remove('loading');
+  });
+;
+__tlReady( function () {
+    const allLanguages = ['en', 'ar'];
+    const allCountries = ['sa', 'ae', 'kw', 'bh'];
+
+    // get defined data or fallback
+    const supportedLanguages = window.pageSupportedLanguages || allLanguages;
+    const supportedCountries = window.pageSupportedCountries || allCountries;
+
+    // hide unsupported language
+    if (supportedLanguages.length <= 1) {
+      document.querySelectorAll('.switch-language').forEach((el) => {
+        el.style.display = 'none';
+      });
+    }
+
+    // hide unsupported countries
+    document.querySelectorAll('[class*="switch-country-"]').forEach((el) => {
+      const match = el.className.match(/switch-country-(\w+)/);
+      if (match) {
+        const countryCode = match[1];
+        if (!supportedCountries.includes(countryCode)) {
+          el.style.display = 'none';
+        }
+      }
+    });
+  });
+;
+(function () {
+    var DEFAULT_ANDROID_URL = 'https://play.google.com/store/apps/details?id=co.tamara.user&hl=en&gl=US';
+    var DEFAULT_IOS_URL = 'https://apps.apple.com/sa/app/tamara-shop-split-in-4/id1533512531';
+    var DEFAULT_FALLBACK_URL = DEFAULT_IOS_URL;
+
+    function isAndroid() {
+      try {
+        if (navigator.userAgentData && navigator.userAgentData.platform) {
+          return /android/i.test(navigator.userAgentData.platform);
+        }
+      } catch (_) {}
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isIOS() {
+      var ua = navigator.userAgent;
+      if (/(iPhone|iPad|iPod)/i.test(ua)) return true;
+      // iPadOS 13+
+      return /Macintosh/.test(ua) && 'ontouchend' in document;
+    }
+
+    function pickStoreUrl(el) {
+      var ANDROID_URL = el?.dataset?.androidUrl || DEFAULT_ANDROID_URL;
+      var IOS_URL = el?.dataset?.iosUrl || DEFAULT_IOS_URL;
+      var FALLBACK_URL = el?.dataset?.fallbackUrl || DEFAULT_FALLBACK_URL;
+
+      if (isAndroid()) return ANDROID_URL;
+      if (isIOS()) return IOS_URL;
+      return FALLBACK_URL;
+    }
+
+    function shouldSkipHref(el) {
+      var href = (el.getAttribute && el.getAttribute('href')) || '';
+      return /^mailto:|^tel:|^sms:|^javascript:/i.test(href);
+    }
+
+    function wire(el) {
+      if (!el || el.__laDownloadWired) return;
+      el.__laDownloadWired = true;
+
+      var url = pickStoreUrl(el);
+
+      if (el.tagName && el.tagName.toLowerCase() === 'a' && !shouldSkipHref(el)) {
+        el.setAttribute('href', url);
+        if (!el.hasAttribute('target')) el.setAttribute('target', '_blank');
+        var rel = (el.getAttribute('rel') || '').toLowerCase();
+        if (!/noopener/.test(rel)) {
+          el.setAttribute('rel', (rel ? rel + ' ' : '') + 'noopener');
+        }
+      } else {
+        el.style.cursor = el.style.cursor || 'pointer';
+        el.addEventListener(
+          'click',
+          function (e) {
+            if (el.dataset.preventDefault !== 'false') e.preventDefault?.();
+            window.open(url, '_blank', 'noopener');
+          },
+          { passive: true },
+        );
+      }
+    }
+
+    function wireAll() {
+      document.querySelectorAll('.la-download-app').forEach(wire);
+    }
+
+    if (document.readyState === 'loading') {
+      __tlReady( wireAll);
+    } else {
+      wireAll();
+    }
+
+    try {
+      var mo = new MutationObserver(function (muts) {
+        for (var m of muts) {
+          m.addedNodes &&
+            m.addedNodes.forEach(function (node) {
+              if (!(node instanceof Element)) return;
+              if (node.matches && node.matches('.la-download-app')) wire(node);
+              node.querySelectorAll && node.querySelectorAll('.la-download-app').forEach(wire);
+            });
+        }
+      });
+      mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    } catch (_) {}
+  })();
+;
+// Define device types, operating systems, and browsers with their detection methods
+  const detectionTypes = {
+    // Device types
+    mobile: () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    tablet: () => /iPad|Android|Silk/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent),
+    desktop: () => !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    touchdevice: () => 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+    landscape: () => window.matchMedia('(orientation: landscape)').matches,
+    portrait: () => window.matchMedia('(orientation: portrait)').matches,
+
+    // Operating Systems
+    ios: () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
+    android: () => /Android/.test(navigator.userAgent),
+    macos: () => /Mac OS X/.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent),
+    windows: () => /Win/.test(navigator.platform),
+    linux: () => /Linux/.test(navigator.platform),
+
+    // Browsers
+    chrome: () => /Chrome/.test(navigator.userAgent) && !/Chromium/.test(navigator.userAgent),
+    firefox: () => /Firefox/.test(navigator.userAgent),
+    safari: () => /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent),
+    edge: () => /Edg/.test(navigator.userAgent),
+    opera: () => /OPR/.test(navigator.userAgent) || /Opera/.test(navigator.userAgent),
+    ie: () => /Trident/.test(navigator.userAgent),
+  };
+
+  function detectTypes() {
+    const detected = [];
+    for (const [type, detector] of Object.entries(detectionTypes)) {
+      if (detector()) {
+        detected.push(type);
+      }
+    }
+    return detected;
+  }
+
+  function evaluateCondition(condition, currentTypes) {
+    const parts = condition.split('&').map((part) => part.trim());
+    return parts.every((part) => {
+      const orParts = part.split('|').map((p) => p.trim());
+      return orParts.some((p) => {
+        if (p.startsWith('!')) {
+          return !currentTypes.includes(p.slice(1));
+        }
+        return currentTypes.includes(p);
+      });
+    });
+  }
+
+  function updateElementVisibility() {
+    const currentTypes = detectTypes();
+    const elements = document.querySelectorAll('[ms-code-device-show]');
+
+    elements.forEach((element) => {
+      const showAttribute = element.getAttribute('ms-code-device-show').toLowerCase();
+      const shouldShow = evaluateCondition(showAttribute, currentTypes);
+      element.style.display = shouldShow ? '' : 'none';
+    });
+  }
+
+  // Run on page load and window resize
+  __tlReady( updateElementVisibility);
+  window.addEventListener('resize', updateElementVisibility);
+;
+__tlReady( function () {
+    document.querySelectorAll('.wait-load').forEach((el) => {
+      el.classList.add('show');
+    });
+  });
+;
+/**
+   * Persist & Enforce UTM across pages in Webflow (SESSION ONLY)
+   * - Captures UTM params on first visit of the SESSION and stores them in sessionStorage
+   * - Internal links: always overwrite UTM with stored session UTMs
+   * - Outbound links (to defined domains): remove all original UTMs and replace with session UTMs
+   * - Non-UTM query params and hash fragments are preserved
+   *
+   * IMPORTANT: UTMs DO NOT persist across browser restarts (sessionStorage).
+   * Legacy cleanup: removes any old localStorage key to avoid reviving stale UTMs.
+   *
+   * Opt-out: add data-utm-keep="false" to <a> tag if you don’t want UTM appended
+   */
+
+  (function () {
+    // ---- Config ----
+    var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+
+    // Session-scoped storage key
+    var SESSION_STORAGE_KEY = 'utm_params_session';
+
+    // Optional: remove legacy localStorage value left by previous version
+    var CLEAR_LEGACY_LOCALSTORAGE = true;
+
+    // Outbound domains to enforce UTMs on (extend as needed)
+    var OUTBOUND_DOMAINS = ['https://business.tamara.co', 'https://partners.tamara.co'];
+
+    var DEBUG = false;
+    function log() {
+      if (DEBUG) {
+        try {
+          console.log.apply(console, arguments);
+        } catch (e) {}
+      }
+    }
+
+    // --- Storage helpers (SESSION ONLY) ---
+    function loadSessionUtm() {
+      try {
+        var raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+    function saveSessionUtm(obj) {
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(obj || {}));
+      } catch (e) {}
+    }
+
+    // Legacy cleanup (one-way)
+    (function cleanupLegacy() {
+      if (!CLEAR_LEGACY_LOCALSTORAGE) return;
+      try {
+        localStorage.removeItem('utm_params');
+      } catch (e) {}
+    })();
+
+    // Read UTM from current URL (whitelist keys)
+    function readUtmFromLocation() {
+      var params = new URLSearchParams(window.location.search);
+      var out = {};
+      UTM_KEYS.forEach(function (k) {
+        var v = params.get(k);
+        if (v) out[k] = v;
+      });
+      return out;
+    }
+
+    // Merge: new overrides old (for mid-session updates)
+    function mergeUtm(oldUtm, newUtm) {
+      var merged = Object.assign({}, oldUtm);
+      Object.keys(newUtm || {}).forEach(function (k) {
+        if (newUtm[k]) merged[k] = newUtm[k];
+      });
+      return merged;
+    }
+
+    // Internal link check
+    function isInternalLink(a) {
+      var href = a.getAttribute('href');
+      if (!href) return false;
+      if (href.startsWith('#')) return false;
+      if (href.startsWith('mailto:')) return false;
+      if (href.startsWith('tel:')) return false;
+      if (href.startsWith('javascript:')) return false;
+      if (href.startsWith('/')) return true;
+      try {
+        var url = new URL(href, window.location.origin);
+        return url.origin === window.location.origin;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Internal links: overwrite UTM params with session UTMs
+    function withUtmOverwriteInternal(href, utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return href;
+
+      var base = new URL(href, window.location.origin);
+      var qs = new URLSearchParams(base.search);
+
+      UTM_KEYS.forEach(function (k) {
+        if (utmObj[k]) qs.set(k, utmObj[k]);
+        else qs.delete(k); // optional: remove empty UTMs if present
+      });
+
+      base.search = qs.toString() ? '?' + qs.toString() : '';
+      return base.pathname + base.search + base.hash;
+    }
+
+    // Outbound links: replace ALL UTMs with the session set (preserve non-UTM params)
+    function withUtmReplaceAllOutbound(href, utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return href;
+
+      var base = new URL(href);
+      var qs = new URLSearchParams(base.search);
+
+      // Remove all existing UTM keys
+      UTM_KEYS.forEach(function (k) {
+        qs.delete(k);
+      });
+
+      // Add stored session UTMs
+      Object.keys(utmObj).forEach(function (k) {
+        qs.set(k, utmObj[k]);
+      });
+
+      base.search = qs.toString() ? '?' + qs.toString() : '';
+      return base.origin + base.pathname + base.search + base.hash;
+    }
+
+    // Apply UTMs to all links on the page
+    function applyUtmToLinks(utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return;
+
+      var links = document.querySelectorAll('a[href]');
+      links.forEach(function (a) {
+        var keep = a.getAttribute('data-utm-keep');
+        if (keep && keep.toLowerCase() === 'false') return;
+
+        var orig = a.getAttribute('href');
+
+        // Outbound domains
+        var outboundMatch = OUTBOUND_DOMAINS.find(function (d) {
+          return orig.startsWith(d);
+        });
+
+        if (outboundMatch) {
+          var newHref = withUtmReplaceAllOutbound(orig, utmObj);
+          if (newHref !== orig) {
+            a.setAttribute('href', newHref);
+            log('UTM outbound (session):', { from: orig, to: newHref });
+          }
+          return;
+        }
+
+        // Internal
+        if (isInternalLink(a)) {
+          var newHref = withUtmOverwriteInternal(orig, utmObj);
+          if (newHref !== orig) {
+            a.setAttribute('href', newHref);
+            log('UTM internal (session):', { from: orig, to: newHref });
+          }
+        }
+      });
+    }
+
+    // Capture & persist UTMs FOR THIS SESSION ONLY
+    function captureAndPersistSession() {
+      var current = readUtmFromLocation();
+      if (Object.keys(current).length === 0) return; // no UTM on this page => do NOT create or revive any
+      var stored = loadSessionUtm();
+      var merged = mergeUtm(stored, current); // current overrides stored
+      saveSessionUtm(merged);
+      log('UTM stored in session:', merged);
+    }
+
+    // Observe DOM (Webflow dynamic injections)
+    function setupObserver(utmObj) {
+      if (!window.MutationObserver) return;
+      var obs = new MutationObserver(function () {
+        applyUtmToLinks(utmObj);
+      });
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+    }
+
+    function init() {
+      // 1) Only store UTMs if present in CURRENT URL (session-scoped)
+      captureAndPersistSession();
+
+      // 2) Load session UTMs (if any) and apply to links
+      var sessionUtm = loadSessionUtm();
+      applyUtmToLinks(sessionUtm);
+
+      // 3) Keep applying on DOM changes (for late-added links)
+      setupObserver(sessionUtm);
+    }
+
+    if (document.readyState === 'loading') {
+      __tlReady( init);
+    } else {
+      init();
+    }
+  })();
+;
+__tlReady( () => {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+    // Single shared observer for all items
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            showItem(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px -10% 0px',
+      },
+    );
+
+    // Set initial hidden state for each item
+    const initItem = (item, delay = 0) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(24px)';
+      item.style.willChange = 'opacity, transform';
+      item.style.transition = 'opacity 1.2s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1)';
+      item.style.transitionDelay = isMobile ? '0ms' : `${delay}ms`;
+    };
+
+    // Trigger fade-up animation and free GPU memory after transition
+    const showItem = (item) => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+      item.addEventListener(
+        'transitionend',
+        () => {
+          item.style.willChange = 'auto';
+        },
+        { once: true },
+      );
+    };
+
+    // Auto-apply fade-up classes to FAQ section
+    document.querySelectorAll('.la-component_faq').forEach((faq) => {
+      faq.classList.add('fade-up-group');
+      faq.querySelectorAll('.la-faq-dropdown-item').forEach((item) => {
+        item.classList.add('fade-up-item');
+      });
+    });
+
+    // Items inside .fade-up-group — apply stagger delay on desktop, capped at 400ms
+    document.querySelectorAll('.fade-up-group').forEach((group) => {
+      group.querySelectorAll('.fade-up-item').forEach((item, index) => {
+        initItem(item, Math.min(index * 150, 400));
+        observer.observe(item);
+      });
+    });
+
+    // Items outside .fade-up-group — observe individually with no stagger
+    document.querySelectorAll('.fade-up-item').forEach((item) => {
+      if (!item.closest('.fade-up-group')) {
+        initItem(item);
+        observer.observe(item);
+      }
+    });
+  });
+
+  // Auto-apply fade-up classes to FAQ section
+  document.querySelectorAll('.la-component_faq').forEach((faq) => {
+    faq.classList.add('fade-up-group');
+    faq.querySelectorAll('.la-wrapper-heading-faq').forEach((heading) => {
+      heading.classList.add('fade-up-item');
+    });
+    faq.querySelectorAll('.la-faq-dropdown-item').forEach((item) => {
+      item.classList.add('fade-up-item');
+    });
+  });

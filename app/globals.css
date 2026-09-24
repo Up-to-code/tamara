@@ -1,0 +1,21 @@
+/* Local base: embeds + safety helpers. The visual system is tamara's own
+   stylesheet (public/tamara-core.css), scraped verbatim. */
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Fallback reveal if the site's own scripts are blocked: [data-w-id] nodes
+   start hidden only when webflow sets inline styles, so no-JS still shows
+   content. Nothing to do here by default. */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
