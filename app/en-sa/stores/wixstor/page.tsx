@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-stores-wixstor-footer.html';
 import inline from '@/components/exact/en-sa-stores-wixstor.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

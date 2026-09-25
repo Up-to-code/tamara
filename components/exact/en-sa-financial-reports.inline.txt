@@ -1,13 +1,17 @@
 function __tlReady(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn);}else{fn();}}
+try {
 WebFont.load({  google: {    families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Material Symbols Outlined:300,400,500,600,700"]  }});
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 const path = window.location.pathname.toLowerCase();
   if (window.location.pathname !== path) {
     window.location.replace(path);
   }
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 (function () {
   document.addEventListener('click', function (e) {
     const menuBtn = e.target.closest('.w-nav-button');
@@ -20,7 +24,8 @@ const path = window.location.pathname.toLowerCase();
     }, 50);
   }, true);
 })();
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 __tlReady( function () {
     // Parse current URL in format "/{lang}-{country}/..."
     var currentPath = window.location.pathname;
@@ -52,7 +57,8 @@ __tlReady( function () {
       });
     }
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 function disableScroll() {
     document.body.style.overflow = 'hidden';
     document.body.style.paddingRight = window.innerWidth - document.documentElement.clientWidth + 'px';
@@ -92,7 +98,8 @@ function disableScroll() {
       });
     }
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 __tlReady( function () {
     if (!window.pageLocales) return;
 
@@ -111,12 +118,14 @@ __tlReady( function () {
       }
     });
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 document.body.classList.add('loading');
   __tlReady( function () {
     document.body.classList.remove('loading');
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 __tlReady( function () {
     const allLanguages = ['en', 'ar'];
     const allCountries = ['sa', 'ae', 'kw', 'bh'];
@@ -143,7 +152,8 @@ __tlReady( function () {
       }
     });
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 (function () {
     var DEFAULT_ANDROID_URL = 'https://play.google.com/store/apps/details?id=co.tamara.user&hl=en&gl=US';
     var DEFAULT_IOS_URL = 'https://apps.apple.com/sa/app/tamara-shop-split-in-4/id1533512531';
@@ -230,7 +240,8 @@ __tlReady( function () {
       mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
     } catch (_) {}
   })();
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 // Define device types, operating systems, and browsers with their detection methods
   const detectionTypes = {
     // Device types
@@ -294,13 +305,15 @@ __tlReady( function () {
   // Run on page load and window resize
   __tlReady( updateElementVisibility);
   window.addEventListener('resize', updateElementVisibility);
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 __tlReady( function () {
     document.querySelectorAll('.wait-load').forEach((el) => {
       el.classList.add('show');
     });
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 /**
    * Persist & Enforce UTM across pages in Webflow (SESSION ONLY)
    * - Captures UTM params on first visit of the SESSION and stores them in sessionStorage
@@ -507,7 +520,8 @@ __tlReady( function () {
       init();
     }
   })();
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 __tlReady( () => {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
@@ -584,6 +598,8 @@ __tlReady( () => {
       item.classList.add('fade-up-item');
     });
   });
-;
+} catch (e) { console.error('[tl-inline]', e); }
+try {
 window.pageSupportedLanguages = ['en', 'ar']; //['en', 'ar'];
   window.pageSupportedCountries = ['sa']; //['sa', 'ae', 'kw', 'bh'];
+} catch (e) { console.error('[tl-inline]', e); }

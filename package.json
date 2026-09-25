@@ -19,6 +19,7 @@
     "@types/node": "^22.13.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "playwright-core": "^1.63.0",
     "raw-loader": "^4.0.2",
     "typescript": "^5.7.0"
   }

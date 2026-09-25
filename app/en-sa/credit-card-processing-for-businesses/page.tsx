@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-credit-card-processing-for-business
 import inline from '@/components/exact/en-sa-credit-card-processing-for-businesses.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

@@ -19,7 +19,11 @@ for (const f of files) {
   }
   const route = manifest[slug].replace(/^\//, '');
   mkdirSync(join('app', route), { recursive: true });
-  const rtl = route.startsWith('ar-sa') ? ' lang="ar-SA" dir="rtl"' : '';
+  const locale = route.startsWith('ar-sa')
+    ? ' lang="ar-SA" dir="rtl"'
+    : route.startsWith('en-sa')
+      ? ' lang="en-SA" dir="ltr"'
+      : '';
   writeFileSync(
     join('app', route, 'page.tsx'),
     `import TamaraPage from '@/components/TamaraPage';
@@ -29,7 +33,7 @@ import footer from '@/components/exact/${slug}-footer.html';
 import inline from '@/components/exact/${slug}.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline}${rtl} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline}${locale} />;
 }
 `
   );

@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-blog-category-inside-tamara-footer.
 import inline from '@/components/exact/en-sa-blog-category-inside-tamara.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

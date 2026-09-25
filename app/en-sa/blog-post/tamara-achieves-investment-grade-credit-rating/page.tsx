@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-blog-post-tamara-achieves-investmen
 import inline from '@/components/exact/en-sa-blog-post-tamara-achieves-investment-grade-credit-rating.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-blog-post-tamara-financial-ledger-i
 import inline from '@/components/exact/en-sa-blog-post-tamara-financial-ledger-insights.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

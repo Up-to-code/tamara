@@ -5,5 +5,5 @@ import footer from '@/components/exact/en-sa-blog-post-tamara-secures-up-to-2-4-
 import inline from '@/components/exact/en-sa-blog-post-tamara-secures-up-to-2-4-billion-dollar-facility.inline.txt';
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} />;
+  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
 }

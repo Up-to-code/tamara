@@ -42,19 +42,32 @@ const slugOf = (p) =>
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// depth-match a <div> subtree starting at openIdx (index of '<div')
-function subtree(html, openIdx) {
+// depth-match a <div> subtree starting at openIdx (index of '<div').
+// Runs on HTML with script/style/textarea/template bodies blanked
+// (length-preserving) so tags inside code can't corrupt the depth count.
+function blanked(html) {
+  const blankCodes = html.replace(
+    /(<(?:script|style|textarea|template)[^>]*>)[\s\S]*?(<\/(?:script|style|textarea|template)>)/gi,
+    (m, open, close) => open + ' '.repeat(m.length - open.length - close.length) + close
+  );
+  return blankCodes.replace(
+    /<!--[\s\S]*?-->/g,
+    (m) => ' '.repeat(m.length)
+  );
+}
+
+function subtreeOn(scan, html, openIdx) {
   const re = /<\/?div(?=[\s>])/g;
   re.lastIndex = openIdx;
   let depth = 0;
   let m;
-  while ((m = re.exec(html))) {
+  while ((m = re.exec(scan))) {
     if (m[0] === '<div') {
       depth += 1;
     } else {
       depth -= 1;
       if (depth === 0) {
-        const end = html.indexOf('>', m.index) + 1;
+        const end = scan.indexOf('>', m.index) + 1;
         return html.slice(openIdx, end);
       }
     }
@@ -63,10 +76,39 @@ function subtree(html, openIdx) {
 }
 
 function findDivWith(html, cls, from = 0) {
-  const i = html.indexOf(cls, from);
+  const scan = blanked(html);
+  const i = scan.indexOf(cls, from);
   if (i === -1) return null;
-  const open = html.lastIndexOf('<div', i);
-  return open === -1 ? null : { open, tree: subtree(html, open) };
+  const open = scan.lastIndexOf('<div', i);
+  return open === -1 ? null : { open, tree: subtreeOn(scan, html, open) };
+}
+
+// depth (div nesting) of scan at position `to`, counting from `from`
+function depthAt(scan, from, to) {
+  const re = /<\/?div(?=[\s>])/g;
+  re.lastIndex = from;
+  let depth = 0;
+  let m;
+  while ((m = re.exec(scan)) && m.index < to) {
+    depth += m[0] === '<div' ? 1 : -1;
+  }
+  return depth;
+}
+
+// The navbar is sometimes wrapped (e.g. float banner opens before it and
+// closes after it). After the navbar subtree, consume following </div>s that
+// close ancestors opened inside the header (but never the page wrapper at
+// depth 1), so the header file is balanced and the body starts clean.
+function extendThroughWrappers(scan, html, bodyOpen, navEnd) {
+  let end = navEnd;
+  for (;;) {
+    const rest = scan.slice(end);
+    const m = rest.match(/^\s*(?:<!--[\s\S]*?-->\s*)*<\/div\s*>/);
+    if (!m) break;
+    if (depthAt(scan, bodyOpen, end) <= 1) break;
+    end += m[0].length;
+  }
+  return html.slice(bodyOpen, end);
 }
 
 const ANALYTICS = /googletagmanager|gtag\(|google_tags_first_party|statsig|AW-|dataLayer\.push|gtm\.js/i;
@@ -91,11 +133,59 @@ function bundleInline(html) {
         .replace(/window\.addEventListener\(\s*["']load["']\s*,/g, '__tlReady(')
     );
   }
-  return READY_HELPER + parts.join('\n;\n');
+  return READY_HELPER + parts.map((p) => `try {\n${p}\n} catch (e) { console.error('[tl-inline]', e); }`).join('\n');
 }
 
 const stripScripts = (s) =>
   s.replace(/<script([^>]*)>[\s\S]*?<\/script>/g, (m, attrs) => (isExecutable(attrs) ? '' : m));
+
+const VOID_TAGS = new Set(
+  'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr'.split(',')
+);
+
+// TamaraPage renders header+body+footer concatenated into ONE innerHTML div.
+// A browser parsing the streamed SSR HTML does NOT auto-close unclosed tags
+// at the end (unlike fragment innerHTML assignment on the client), so any tag
+// left open (e.g. the page wrapper, closed after </footer> in the original)
+// swallows the JSX closing tags AND Next's flight scripts on the server while
+// the client nests cleanly = hydration mismatch + blank page. Balance the
+// concat by appending the missing closes to the footer.
+function balanceConcat(header, body, footer) {
+  const doc = header + body + footer;
+  const stack = [];
+  const re = /<(\/?)([a-zA-Z][a-zA-Z0-9-]*)(?=[\s/>])[^>]*?(\/?)>/g;
+  let m;
+  while (re.lastIndex < doc.length) {
+    const skipC = doc.slice(re.lastIndex).match(/^\s*<!--[\s\S]*?-->/);
+    if (skipC) {
+      re.lastIndex += skipC[0].length;
+      continue;
+    }
+    m = re.exec(doc);
+    if (!m) break;
+    const [full, slash, tagRaw, selfClose] = m;
+    const tag = tagRaw.toLowerCase();
+    if (VOID_TAGS.has(tag) || selfClose === '/' || full.endsWith('/>')) continue;
+    if (tag === 'script' || tag === 'style') {
+      if (slash) continue;
+      // raw-text element: jump past its close
+      const close = new RegExp(`</${tag}\\s*>`, 'gi');
+      close.lastIndex = re.lastIndex;
+      const cm = close.exec(doc);
+      if (cm) re.lastIndex = cm.index + cm[0].length;
+      continue;
+    }
+    if (slash) {
+      const i = stack.lastIndexOf(tag);
+      if (i !== -1) stack.length = i;
+    } else {
+      stack.push(tag);
+    }
+  }
+  if (!stack.length) return footer;
+  const names = [...stack].reverse();
+  return `${footer}<!-- tl-balance:${names.join(',')} -->${names.map((t) => `</${t}>`).join('')}`;
+}
 
 let cssSaved = existsSync(join(pubDir, 'tamara-core.css'));
 let ok = 0;
@@ -120,7 +210,7 @@ for (const [n, path] of paths.entries()) {
     }
   }
 
-  const nav = findDivWith(html, 'w-nav');
+  const nav = findDivWith(html, 'w-nav', html.indexOf('<body'));
   const footIdx = html.indexOf('<footer');
   if (!nav?.tree || footIdx === -1) {
     fail.push(`${path} (split)`);
@@ -129,16 +219,18 @@ for (const [n, path] of paths.entries()) {
   const navEnd = html.indexOf(nav.tree, nav.open) + nav.tree.length;
   // footer root is the <footer> tag itself: match to its close
   const footClose = html.indexOf('</footer>', footIdx) + '</footer>'.length;
-  const footer = html.slice(footIdx, footClose);
+  const footerRaw = html.slice(footIdx, footClose);
   const bodyStart = html.indexOf('<body');
   const bodyOpen = html.indexOf('>', bodyStart) + 1;
 
-  const header = html.slice(bodyOpen, navEnd);
-  const body = html.slice(navEnd, footIdx);
+  const headerRaw = extendThroughWrappers(blanked(html), html, bodyOpen, navEnd);
+  const header = stripScripts(headerRaw);
+  const body = stripScripts(html.slice(bodyOpen + headerRaw.length, footIdx));
+  const footer = balanceConcat(header, body, stripScripts(footerRaw));
 
-  writeFileSync(join(exactDir, `${slug}-header.html`), stripScripts(header));
-  writeFileSync(join(exactDir, `${slug}-body.html`), stripScripts(body));
-  writeFileSync(join(exactDir, `${slug}-footer.html`), stripScripts(footer));
+  writeFileSync(join(exactDir, `${slug}-header.html`), header);
+  writeFileSync(join(exactDir, `${slug}-body.html`), body);
+  writeFileSync(join(exactDir, `${slug}-footer.html`), footer);
   writeFileSync(join(exactDir, `${slug}.inline.txt`), bundleInline(html));
   ok += 1;
 
