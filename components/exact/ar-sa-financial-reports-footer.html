@@ -8,3 +8,615 @@
     }
   }
 </style></div></div></footer><!-- tl-balance:div --></div>
+<script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67c184892f7a84b971ff49d9"></script>
+<script>function __tlReady(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn);}else{fn();}}
+try {
+WebFont.load({  google: {    families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Material Symbols Outlined:300,400,500,600,700"]  }});
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+const path = window.location.pathname.toLowerCase();
+  if (window.location.pathname !== path) {
+    window.location.replace(path);
+  }
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+(function () {
+  document.addEventListener('click', function (e) {
+    const menuBtn = e.target.closest('.w-nav-button');
+    if (!menuBtn) return;
+
+    const nav = menuBtn.closest('.w-nav');
+    setTimeout(() => {
+      const personalTab = nav ? nav.querySelector('.is-default-open') : document.querySelector('.is-default-open');
+      if (personalTab) personalTab.click();
+    }, 50);
+  }, true);
+})();
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+__tlReady( function () {
+    // Parse current URL in format "/{lang}-{country}/..."
+    var currentPath = window.location.pathname;
+    var regex = /^\/([a-z]{2,3})-([a-z]{2,3})(\/.*)?$/;
+    var match = currentPath.match(regex);
+
+    if (match) {
+      var currentLang = match[1].toLowerCase(); // e.g. "en" or "ar"
+      var currentCountry = match[2].toLowerCase(); // e.g. "sa", "ae", "kw"
+      var restOfPath = match[3] || ''; // the rest of the path, e.g. "/stores/noon"
+
+      // Update the language switch link
+      var languageSwitchLinks = document.querySelectorAll('.switch-language');
+      if (languageSwitchLinks.length > 0) {
+        var newLang = currentLang === 'en' ? 'ar' : 'en';
+        languageSwitchLinks.forEach(function (link) {
+          link.href = '/' + newLang + '-' + currentCountry + restOfPath;
+        });
+      }
+
+      // Update the country dropdown links
+      var countries = ['sa', 'ae', 'kw', 'bh'];
+      countries.forEach(function (country) {
+        var selector = '.switch-country-' + country;
+        var countryLink = document.querySelector(selector);
+        if (countryLink) {
+          countryLink.href = '/' + currentLang + '-' + country + restOfPath;
+        }
+      });
+    }
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+function disableScroll() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = window.innerWidth - document.documentElement.clientWidth + 'px';
+  }
+  function enableScroll() {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }
+
+  __tlReady( function () {
+    var popups = document.querySelectorAll('[class^="ta-popup-modal"]');
+    if (!popups.length) return;
+
+    popups.forEach(function (modal) {
+      var observer = new MutationObserver(function () {
+        var isVisible = window.getComputedStyle(modal).display !== 'none';
+        if (isVisible) {
+          disableScroll();
+        } else {
+          var anyVisible = Array.from(popups).some(function (p) {
+            return window.getComputedStyle(p).display !== 'none';
+          });
+          if (!anyVisible) enableScroll();
+        }
+      });
+
+      observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
+    });
+  });
+
+  document.addEventListener('click', function (event) {
+    if (event.target.closest('.ta-popup-bg') || event.target.closest('.ta-popup-btn-close')) {
+      // find and hide all popup modals that have class start with 'ta-popup-modal'
+      var popups = document.querySelectorAll('[class^="ta-popup-modal"]');
+      popups.forEach(function (popup) {
+        popup.style.display = 'none';
+      });
+    }
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+__tlReady( function () {
+    if (!window.pageLocales) return;
+
+    // Hide language switches not supported
+    document.querySelectorAll('.switch_language [data-lang]').forEach((btn) => {
+      if (!window.pageLocales.languages.includes(btn.dataset.lang)) {
+        btn.style.display = 'none';
+      }
+    });
+
+    // Hide country switches not supported
+    document.querySelectorAll("[class^='switch-country-']").forEach((el) => {
+      const country = el.className.match(/switch-country-([a-z]+)/i)?.[1];
+      if (country && !window.pageLocales.countries.includes(country)) {
+        el.style.display = 'none';
+      }
+    });
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+document.body.classList.add('loading');
+  __tlReady( function () {
+    document.body.classList.remove('loading');
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+__tlReady( function () {
+    const allLanguages = ['en', 'ar'];
+    const allCountries = ['sa', 'ae', 'kw', 'bh'];
+
+    // get defined data or fallback
+    const supportedLanguages = window.pageSupportedLanguages || allLanguages;
+    const supportedCountries = window.pageSupportedCountries || allCountries;
+
+    // hide unsupported language
+    if (supportedLanguages.length <= 1) {
+      document.querySelectorAll('.switch-language').forEach((el) => {
+        el.style.display = 'none';
+      });
+    }
+
+    // hide unsupported countries
+    document.querySelectorAll('[class*="switch-country-"]').forEach((el) => {
+      const match = el.className.match(/switch-country-(\w+)/);
+      if (match) {
+        const countryCode = match[1];
+        if (!supportedCountries.includes(countryCode)) {
+          el.style.display = 'none';
+        }
+      }
+    });
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+(function () {
+    var DEFAULT_ANDROID_URL = 'https://play.google.com/store/apps/details?id=co.tamara.user&hl=en&gl=US';
+    var DEFAULT_IOS_URL = 'https://apps.apple.com/sa/app/tamara-shop-split-in-4/id1533512531';
+    var DEFAULT_FALLBACK_URL = DEFAULT_IOS_URL;
+
+    function isAndroid() {
+      try {
+        if (navigator.userAgentData && navigator.userAgentData.platform) {
+          return /android/i.test(navigator.userAgentData.platform);
+        }
+      } catch (_) {}
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isIOS() {
+      var ua = navigator.userAgent;
+      if (/(iPhone|iPad|iPod)/i.test(ua)) return true;
+      // iPadOS 13+
+      return /Macintosh/.test(ua) && 'ontouchend' in document;
+    }
+
+    function pickStoreUrl(el) {
+      var ANDROID_URL = el?.dataset?.androidUrl || DEFAULT_ANDROID_URL;
+      var IOS_URL = el?.dataset?.iosUrl || DEFAULT_IOS_URL;
+      var FALLBACK_URL = el?.dataset?.fallbackUrl || DEFAULT_FALLBACK_URL;
+
+      if (isAndroid()) return ANDROID_URL;
+      if (isIOS()) return IOS_URL;
+      return FALLBACK_URL;
+    }
+
+    function shouldSkipHref(el) {
+      var href = (el.getAttribute && el.getAttribute('href')) || '';
+      return /^mailto:|^tel:|^sms:|^javascript:/i.test(href);
+    }
+
+    function wire(el) {
+      if (!el || el.__laDownloadWired) return;
+      el.__laDownloadWired = true;
+
+      var url = pickStoreUrl(el);
+
+      if (el.tagName && el.tagName.toLowerCase() === 'a' && !shouldSkipHref(el)) {
+        el.setAttribute('href', url);
+        if (!el.hasAttribute('target')) el.setAttribute('target', '_blank');
+        var rel = (el.getAttribute('rel') || '').toLowerCase();
+        if (!/noopener/.test(rel)) {
+          el.setAttribute('rel', (rel ? rel + ' ' : '') + 'noopener');
+        }
+      } else {
+        el.style.cursor = el.style.cursor || 'pointer';
+        el.addEventListener(
+          'click',
+          function (e) {
+            if (el.dataset.preventDefault !== 'false') e.preventDefault?.();
+            window.open(url, '_blank', 'noopener');
+          },
+          { passive: true },
+        );
+      }
+    }
+
+    function wireAll() {
+      document.querySelectorAll('.la-download-app').forEach(wire);
+    }
+
+    if (document.readyState === 'loading') {
+      __tlReady( wireAll);
+    } else {
+      wireAll();
+    }
+
+    try {
+      var mo = new MutationObserver(function (muts) {
+        for (var m of muts) {
+          m.addedNodes &&
+            m.addedNodes.forEach(function (node) {
+              if (!(node instanceof Element)) return;
+              if (node.matches && node.matches('.la-download-app')) wire(node);
+              node.querySelectorAll && node.querySelectorAll('.la-download-app').forEach(wire);
+            });
+        }
+      });
+      mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    } catch (_) {}
+  })();
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+// Define device types, operating systems, and browsers with their detection methods
+  const detectionTypes = {
+    // Device types
+    mobile: () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    tablet: () => /iPad|Android|Silk/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent),
+    desktop: () => !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    touchdevice: () => 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+    landscape: () => window.matchMedia('(orientation: landscape)').matches,
+    portrait: () => window.matchMedia('(orientation: portrait)').matches,
+
+    // Operating Systems
+    ios: () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
+    android: () => /Android/.test(navigator.userAgent),
+    macos: () => /Mac OS X/.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent),
+    windows: () => /Win/.test(navigator.platform),
+    linux: () => /Linux/.test(navigator.platform),
+
+    // Browsers
+    chrome: () => /Chrome/.test(navigator.userAgent) && !/Chromium/.test(navigator.userAgent),
+    firefox: () => /Firefox/.test(navigator.userAgent),
+    safari: () => /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent),
+    edge: () => /Edg/.test(navigator.userAgent),
+    opera: () => /OPR/.test(navigator.userAgent) || /Opera/.test(navigator.userAgent),
+    ie: () => /Trident/.test(navigator.userAgent),
+  };
+
+  function detectTypes() {
+    const detected = [];
+    for (const [type, detector] of Object.entries(detectionTypes)) {
+      if (detector()) {
+        detected.push(type);
+      }
+    }
+    return detected;
+  }
+
+  function evaluateCondition(condition, currentTypes) {
+    const parts = condition.split('&').map((part) => part.trim());
+    return parts.every((part) => {
+      const orParts = part.split('|').map((p) => p.trim());
+      return orParts.some((p) => {
+        if (p.startsWith('!')) {
+          return !currentTypes.includes(p.slice(1));
+        }
+        return currentTypes.includes(p);
+      });
+    });
+  }
+
+  function updateElementVisibility() {
+    const currentTypes = detectTypes();
+    const elements = document.querySelectorAll('[ms-code-device-show]');
+
+    elements.forEach((element) => {
+      const showAttribute = element.getAttribute('ms-code-device-show').toLowerCase();
+      const shouldShow = evaluateCondition(showAttribute, currentTypes);
+      element.style.display = shouldShow ? '' : 'none';
+    });
+  }
+
+  // Run on page load and window resize
+  __tlReady( updateElementVisibility);
+  window.addEventListener('resize', updateElementVisibility);
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+__tlReady( function () {
+    document.querySelectorAll('.wait-load').forEach((el) => {
+      el.classList.add('show');
+    });
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+/**
+   * Persist & Enforce UTM across pages in Webflow (SESSION ONLY)
+   * - Captures UTM params on first visit of the SESSION and stores them in sessionStorage
+   * - Internal links: always overwrite UTM with stored session UTMs
+   * - Outbound links (to defined domains): remove all original UTMs and replace with session UTMs
+   * - Non-UTM query params and hash fragments are preserved
+   *
+   * IMPORTANT: UTMs DO NOT persist across browser restarts (sessionStorage).
+   * Legacy cleanup: removes any old localStorage key to avoid reviving stale UTMs.
+   *
+   * Opt-out: add data-utm-keep="false" to <a> tag if you don’t want UTM appended
+   */
+
+  (function () {
+    // ---- Config ----
+    var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+
+    // Session-scoped storage key
+    var SESSION_STORAGE_KEY = 'utm_params_session';
+
+    // Optional: remove legacy localStorage value left by previous version
+    var CLEAR_LEGACY_LOCALSTORAGE = true;
+
+    // Outbound domains to enforce UTMs on (extend as needed)
+    var OUTBOUND_DOMAINS = ['https://business.tamara.co', 'https://partners.tamara.co'];
+
+    var DEBUG = false;
+    function log() {
+      if (DEBUG) {
+        try {
+          console.log.apply(console, arguments);
+        } catch (e) {}
+      }
+    }
+
+    // --- Storage helpers (SESSION ONLY) ---
+    function loadSessionUtm() {
+      try {
+        var raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+    function saveSessionUtm(obj) {
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(obj || {}));
+      } catch (e) {}
+    }
+
+    // Legacy cleanup (one-way)
+    (function cleanupLegacy() {
+      if (!CLEAR_LEGACY_LOCALSTORAGE) return;
+      try {
+        localStorage.removeItem('utm_params');
+      } catch (e) {}
+    })();
+
+    // Read UTM from current URL (whitelist keys)
+    function readUtmFromLocation() {
+      var params = new URLSearchParams(window.location.search);
+      var out = {};
+      UTM_KEYS.forEach(function (k) {
+        var v = params.get(k);
+        if (v) out[k] = v;
+      });
+      return out;
+    }
+
+    // Merge: new overrides old (for mid-session updates)
+    function mergeUtm(oldUtm, newUtm) {
+      var merged = Object.assign({}, oldUtm);
+      Object.keys(newUtm || {}).forEach(function (k) {
+        if (newUtm[k]) merged[k] = newUtm[k];
+      });
+      return merged;
+    }
+
+    // Internal link check
+    function isInternalLink(a) {
+      var href = a.getAttribute('href');
+      if (!href) return false;
+      if (href.startsWith('#')) return false;
+      if (href.startsWith('mailto:')) return false;
+      if (href.startsWith('tel:')) return false;
+      if (href.startsWith('javascript:')) return false;
+      if (href.startsWith('/')) return true;
+      try {
+        var url = new URL(href, window.location.origin);
+        return url.origin === window.location.origin;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Internal links: overwrite UTM params with session UTMs
+    function withUtmOverwriteInternal(href, utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return href;
+
+      var base = new URL(href, window.location.origin);
+      var qs = new URLSearchParams(base.search);
+
+      UTM_KEYS.forEach(function (k) {
+        if (utmObj[k]) qs.set(k, utmObj[k]);
+        else qs.delete(k); // optional: remove empty UTMs if present
+      });
+
+      base.search = qs.toString() ? '?' + qs.toString() : '';
+      return base.pathname + base.search + base.hash;
+    }
+
+    // Outbound links: replace ALL UTMs with the session set (preserve non-UTM params)
+    function withUtmReplaceAllOutbound(href, utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return href;
+
+      var base = new URL(href);
+      var qs = new URLSearchParams(base.search);
+
+      // Remove all existing UTM keys
+      UTM_KEYS.forEach(function (k) {
+        qs.delete(k);
+      });
+
+      // Add stored session UTMs
+      Object.keys(utmObj).forEach(function (k) {
+        qs.set(k, utmObj[k]);
+      });
+
+      base.search = qs.toString() ? '?' + qs.toString() : '';
+      return base.origin + base.pathname + base.search + base.hash;
+    }
+
+    // Apply UTMs to all links on the page
+    function applyUtmToLinks(utmObj) {
+      if (!utmObj || Object.keys(utmObj).length === 0) return;
+
+      var links = document.querySelectorAll('a[href]');
+      links.forEach(function (a) {
+        var keep = a.getAttribute('data-utm-keep');
+        if (keep && keep.toLowerCase() === 'false') return;
+
+        var orig = a.getAttribute('href');
+
+        // Outbound domains
+        var outboundMatch = OUTBOUND_DOMAINS.find(function (d) {
+          return orig.startsWith(d);
+        });
+
+        if (outboundMatch) {
+          var newHref = withUtmReplaceAllOutbound(orig, utmObj);
+          if (newHref !== orig) {
+            a.setAttribute('href', newHref);
+            log('UTM outbound (session):', { from: orig, to: newHref });
+          }
+          return;
+        }
+
+        // Internal
+        if (isInternalLink(a)) {
+          var newHref = withUtmOverwriteInternal(orig, utmObj);
+          if (newHref !== orig) {
+            a.setAttribute('href', newHref);
+            log('UTM internal (session):', { from: orig, to: newHref });
+          }
+        }
+      });
+    }
+
+    // Capture & persist UTMs FOR THIS SESSION ONLY
+    function captureAndPersistSession() {
+      var current = readUtmFromLocation();
+      if (Object.keys(current).length === 0) return; // no UTM on this page => do NOT create or revive any
+      var stored = loadSessionUtm();
+      var merged = mergeUtm(stored, current); // current overrides stored
+      saveSessionUtm(merged);
+      log('UTM stored in session:', merged);
+    }
+
+    // Observe DOM (Webflow dynamic injections)
+    function setupObserver(utmObj) {
+      if (!window.MutationObserver) return;
+      var obs = new MutationObserver(function () {
+        applyUtmToLinks(utmObj);
+      });
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+    }
+
+    function init() {
+      // 1) Only store UTMs if present in CURRENT URL (session-scoped)
+      captureAndPersistSession();
+
+      // 2) Load session UTMs (if any) and apply to links
+      var sessionUtm = loadSessionUtm();
+      applyUtmToLinks(sessionUtm);
+
+      // 3) Keep applying on DOM changes (for late-added links)
+      setupObserver(sessionUtm);
+    }
+
+    if (document.readyState === 'loading') {
+      __tlReady( init);
+    } else {
+      init();
+    }
+  })();
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+__tlReady( () => {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+    // Single shared observer for all items
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            showItem(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px -10% 0px',
+      },
+    );
+
+    // Set initial hidden state for each item
+    const initItem = (item, delay = 0) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(24px)';
+      item.style.willChange = 'opacity, transform';
+      item.style.transition = 'opacity 1.2s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1)';
+      item.style.transitionDelay = isMobile ? '0ms' : `${delay}ms`;
+    };
+
+    // Trigger fade-up animation and free GPU memory after transition
+    const showItem = (item) => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+      item.addEventListener(
+        'transitionend',
+        () => {
+          item.style.willChange = 'auto';
+        },
+        { once: true },
+      );
+    };
+
+    // Auto-apply fade-up classes to FAQ section
+    document.querySelectorAll('.la-component_faq').forEach((faq) => {
+      faq.classList.add('fade-up-group');
+      faq.querySelectorAll('.la-faq-dropdown-item').forEach((item) => {
+        item.classList.add('fade-up-item');
+      });
+    });
+
+    // Items inside .fade-up-group — apply stagger delay on desktop, capped at 400ms
+    document.querySelectorAll('.fade-up-group').forEach((group) => {
+      group.querySelectorAll('.fade-up-item').forEach((item, index) => {
+        initItem(item, Math.min(index * 150, 400));
+        observer.observe(item);
+      });
+    });
+
+    // Items outside .fade-up-group — observe individually with no stagger
+    document.querySelectorAll('.fade-up-item').forEach((item) => {
+      if (!item.closest('.fade-up-group')) {
+        initItem(item);
+        observer.observe(item);
+      }
+    });
+  });
+
+  // Auto-apply fade-up classes to FAQ section
+  document.querySelectorAll('.la-component_faq').forEach((faq) => {
+    faq.classList.add('fade-up-group');
+    faq.querySelectorAll('.la-wrapper-heading-faq').forEach((heading) => {
+      heading.classList.add('fade-up-item');
+    });
+    faq.querySelectorAll('.la-faq-dropdown-item').forEach((item) => {
+      item.classList.add('fade-up-item');
+    });
+  });
+} catch (e) { console.error('[tl-inline]', e); }
+try {
+window.pageSupportedLanguages = ['en', 'ar']; //['en', 'ar'];
+  window.pageSupportedCountries = ['sa']; //['sa', 'ae', 'kw', 'bh'];
+} catch (e) { console.error('[tl-inline]', e); }</script>
+<script src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.schunk.f2efb3c5440a81cf.js"></script>
+<script src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.schunk.c8764fafeba26495.js"></script>
+<script src="https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.fb8c80fc.602b3e3cd8a71017.js"></script>
+<script src="https://cdn.prod.website-files.com/gsap/3.15.0/gsap.min.js"></script>
+<script src="https://cdn.prod.website-files.com/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

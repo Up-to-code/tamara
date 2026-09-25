@@ -2,8 +2,9 @@ import TamaraPage from '@/components/TamaraPage';
 import header from '@/components/exact/en-sa-home-header.html';
 import body from '@/components/exact/en-sa-home-body.html';
 import footer from '@/components/exact/en-sa-home-footer.html';
-import inline from '@/components/exact/en-sa-home.inline.txt';
+
+const htmlAttrs = {"lang":"en-SA","data-wf-domain":"tamara.co","data-wf-page":"68a97f68a235e0cb8934e223","data-wf-site":"67c184892f7a84b971ff49d9"};
 
 export default function Page() {
-  return <TamaraPage header={header} body={body} footer={footer} inline={inline} lang="en-SA" dir="ltr" />;
+  return <TamaraPage header={header} body={body} footer={footer} htmlAttrs={htmlAttrs} />;
 }

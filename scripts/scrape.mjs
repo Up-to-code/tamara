@@ -139,6 +139,79 @@ function bundleInline(html) {
 const stripScripts = (s) =>
   s.replace(/<script([^>]*)>[\s\S]*?<\/script>/g, (m, attrs) => (isExecutable(attrs) ? '' : m));
 
+// Tamara's runtime libs, derived PER PAGE from that page's own scraped HTML so
+// templates that diverge reproduce exactly what the real page loads: careers
+// swaps the publisher bundle to webflow.4c688a4c… instead of …fb8c80fc…, blogs
+// append @finsweet/cms-library, partners/shopify add purecounter_vanilla, the
+// financing page loads a second jQuery (3.7.1), one blog post embeds
+// instagram's loader. Deliberately excluded: statsig, the /haqt6… fingerprint
+// script, and analytics (webfont.js stays a blocking <head> script via layout).
+// finsweetcomponentsconfig-1.0.3.js is emitted by the real page as
+// type="module" async and is read-only by its own attribute runtime — nothing
+// in the inline bundles references it, so it stays excluded (loading it as a
+// classic script throws on import.meta).
+//
+// Ordering contract: IX2 reads [data-w-id] elements and plays their load
+// animations when the webflow publisher bundle boots at end-of-parse; a late
+// (deferred/post-hydration) boot leaves the baked hidden state = the white
+// screen. So the inline bundle (window.Webflow[] configs + page code) must
+// execute at parse time BEFORE the schunks/publisher bundle. But inline code
+// also calls libs it needs at parse time (jQuery `$(document).ready`, `new
+// PureCounter(...)`, `FsLibrary` on the blog template) — those must load BEFORE
+// the inline bundle. Emit:
+//   [parse-time libs] -> [inline bundle] -> [webflow + remaining libs]
+// each slice in the real page's own src order, deduped.
+const ALLOWED_LIBS = new Set([
+  'https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js',
+  'https://cdn.jsdelivr.net/npm/@finsweet/cms-library@1/cms-library.js',
+  'https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67c184892f7a84b971ff49d9',
+  'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+  'https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.schunk.f2efb3c5440a81cf.js',
+  'https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.schunk.c8764fafeba26495.js',
+  'https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.fb8c80fc.602b3e3cd8a71017.js',
+  'https://cdn.prod.website-files.com/67c184892f7a84b971ff49d9/js/webflow.4c688a4c.5a37ac60a4726d3a.js',
+  'https://cdn.prod.website-files.com/gsap/3.15.0/gsap.min.js',
+  'https://cdn.prod.website-files.com/gsap/3.15.0/ScrollTrigger.min.js',
+  'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+  'https://www.instagram.com/embed.js',
+]);
+
+// srcs the inline bundle touches at parse time (measured): jQuery (financing
+// page calls $(document).ready… before __tlReady; safe to always precede),
+// PureCounter (partners/shopify call new PureCounter(...) at parse time) and
+// FsLibrary (blog-landing instantiates it inline).
+const PRE_LIBS = new Set([
+  'https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js',
+  'https://cdn.jsdelivr.net/npm/@finsweet/cms-library@1/cms-library.js',
+  'https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67c184892f7a84b971ff49d9',
+  'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+]);
+
+const pageLibSrcs = (html) => {
+  const seen = new Set();
+  const out = [];
+  for (const m of html.matchAll(/<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi)) {
+    const src = m[1].trim().replace(/^\/\//, 'https://');
+    if (!ALLOWED_LIBS.has(src) || seen.has(src)) continue;
+    seen.add(src);
+    out.push(src);
+  }
+  return out;
+};
+
+const appendPageScripts = (footer, inlineCode, html) => {
+  const esc = inlineCode.replace(/<\/script/gi, '<\\/script');
+  const libs = pageLibSrcs(html);
+  const pre = libs.filter((s) => PRE_LIBS.has(s));
+  const post = libs.filter((s) => !PRE_LIBS.has(s));
+  const tags = [
+    ...pre.map((s) => `<script src="${s}"></script>`),
+    `<script>${esc}</script>`,
+    ...post.map((s) => `<script src="${s}"></script>`),
+  ];
+  return `${footer}\n${tags.join('\n')}`;
+};
+
 const VOID_TAGS = new Set(
   'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr'.split(',')
 );
@@ -227,11 +300,12 @@ for (const [n, path] of paths.entries()) {
   const header = stripScripts(headerRaw);
   const body = stripScripts(html.slice(bodyOpen + headerRaw.length, footIdx));
   const footer = balanceConcat(header, body, stripScripts(footerRaw));
+  const inline = bundleInline(html);
 
   writeFileSync(join(exactDir, `${slug}-header.html`), header);
   writeFileSync(join(exactDir, `${slug}-body.html`), body);
-  writeFileSync(join(exactDir, `${slug}-footer.html`), footer);
-  writeFileSync(join(exactDir, `${slug}.inline.txt`), bundleInline(html));
+  writeFileSync(join(exactDir, `${slug}-footer.html`), appendPageScripts(footer, inline, html));
+  writeFileSync(join(exactDir, `${slug}.inline.txt`), inline);
   ok += 1;
 
   if (!cssSaved) {
